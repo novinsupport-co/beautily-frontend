@@ -1,0 +1,207 @@
+/*src/styles/main.css*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================================
+   ⚙️ Base Layer — Global Defaults
+======================================== */
+@layer base {
+  html, body {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  body {
+    direction: rtl;
+    margin: 0;
+    font-family: "IRANSans", "Vazirmatn", sans-serif;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #app {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover {
+    opacity: 0.8;
+  }
+}
+
+
+/* ========================================
+   🪄 Brand Logo Utility
+======================================== */
+:root {
+  --logo-url: url('../assets/icon/beautilylogo.png');
+}
+
+header a.logo::before {
+  content: '';
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-image: var(--logo-url);
+  background-size: contain;
+  background-repeat: no-repeat;
+  vertical-align: middle;
+  margin-left: 0.5rem;
+}
+
+/* ========================================
+   🧩 Fonts (Local Assets)
+======================================== */
+
+/* Vazir font family */
+@font-face {
+  font-family: 'Vazir';
+  src: url('../assets/fonts/Vazir.woff2') format('woff2');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Vazir-Thin';
+  src: url('../assets/fonts/Vazir-Thin.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Vazir-Light';
+  src: url('../assets/fonts/Vazir-Light.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Vazir-Medium';
+  src: url('../assets/fonts/Vazir-Medium.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Vazir-Bold';
+  src: url('../assets/fonts/Vazir-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Tanha font */
+@font-face {
+  font-family: 'Tanha-small';
+  src: url('../assets/fonts/Tanha.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tanha-Medium';
+  src: url('../assets/fonts/Tanha.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tanha-Bold';
+  src: url('../assets/fonts/Tanha.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* IRANSansX fonts */
+@font-face {
+  font-family: 'IRANSans-Thin';
+  src: url('../assets/fonts/IRANSansX-Thin.woff2') format('woff2');
+  font-weight: 100;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSans-UltraLight';
+  src: url('../assets/fonts/IRANSansX-UltraLight.woff2') format('woff2');
+  font-weight: 200;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSans-Light';
+  src: url('../assets/fonts/IRANSansX-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSans-Regular';
+  src: url('../assets/fonts/IRANSansX-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSans-Medium';
+  src: url('../assets/fonts/IRANSansX-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSans-DemiBold';
+  src: url('../assets/fonts/IRANSansX-DemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSans-Bold';
+  src: url('../assets/fonts/IRANSansX-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSans-ExtraBold';
+  src: url('../assets/fonts/IRANSansX-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSans-Black';
+  src: url('../assets/fonts/IRANSansX-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSans-ExtraBlack';
+  src: url('../assets/fonts/IRANSansX-ExtraBlack.woff2') format('woff2');
+  font-weight: 950;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSans-Heavy';
+  src: url('../assets/fonts/IRANSansX-Heavy.woff2') format('woff2');
+  font-weight: 1000;
+  font-display: swap;
+}
