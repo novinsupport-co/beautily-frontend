@@ -550,31 +550,30 @@ const loadLocalCaptcha = async () => {
 let turnstileTimer: any = null
 
 onMounted(() => {
-  const script = document.createElement('script')
-  script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
-  script.async = true
-  script.defer = true
-  script.onerror = () => loadLocalCaptcha()
+  fetchLoginBackground()
 
-  script.onload = () => {
-    if (window.turnstile) {
-      window.turnstile.render('#turnstile-container', {
-        sitekey: turnstileSiteKey,
-        callback: (token: string) => {
-          turnstileToken.value = token
-          clearTimeout(turnstileTimer)
-        },
-        'error-callback': () => loadLocalCaptcha(),
-      })
-    }
-  }
-  document.head.appendChild(script)
-
+  // یک تاخیر کوتاه برای اطمینان از لود شدن اسکریپت کلودفلر از index.html
   turnstileTimer = setTimeout(() => {
-    if (captchaMode.value === 'turnstile' && !turnstileToken.value) {
+    if (captchaMode.value === 'turnstile') {
+      if (window.turnstile) {
+        window.turnstile.render('#turnstile-container', {
+          sitekey: turnstileSiteKey,
+          callback: (token: string) => {
+            turnstileToken.value = token
+          },
+          'error-callback': () => {
+            notify.error('خطا در بارگذاری کپچا')
+            loadLocalCaptcha()
+          },
+        })
+      } else {
+        // اگر کلودفلر در دسترس نبود یا فیلتر بود، کپچای لوکال لود شود
+        loadLocalCaptcha()
+      }
+    } else {
       loadLocalCaptcha()
     }
-  }, 8000)
+  }, 500)
 })
 
 onBeforeUnmount(() => {

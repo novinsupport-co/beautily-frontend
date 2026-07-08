@@ -613,23 +613,27 @@ const handleError = (e: any) => {
 // ================= هوک‌ها =================
 onMounted(() => {
   fetchLoginBackground()
-  if (captchaMode.value === 'turnstile') {
-    if (!window.turnstile) {
-      const script = document.createElement('script')
-      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
-      script.async = true
-      script.defer = true
-      document.head.appendChild(script)
 
-      script.onload = () => {
-        turnstileTimer = setTimeout(renderTurnstile, 500)
+  turnstileTimer = setTimeout(() => {
+    if (captchaMode.value === 'turnstile') {
+      if (window.turnstile) {
+        window.turnstile.render('#turnstile-container', {
+          sitekey: turnstileSiteKey,
+          callback: (token: string) => {
+            turnstileToken.value = token
+          },
+          'error-callback': () => {
+            notify.error('خطا در بارگذاری کپچا')
+            loadLocalCaptcha() // سوییچ خودکار به لوکال در صورت قطعی
+          },
+        })
+      } else {
+        loadLocalCaptcha()
       }
     } else {
-      renderTurnstile()
+      loadLocalCaptcha()
     }
-  } else {
-    loadLocalCaptcha()
-  }
+  }, 500)
 })
 
 onBeforeUnmount(() => {
