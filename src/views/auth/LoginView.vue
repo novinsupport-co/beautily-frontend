@@ -372,6 +372,7 @@ const formattedTime = computed(() => {
 const captchaMode = ref<'turnstile' | 'local'>('turnstile')
 const turnstileToken = ref('')
 const localCaptchaImage = ref('')
+const localCaptchaKey = ref('')
 const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'
 
 const schema = yup.object({
@@ -436,8 +437,11 @@ const validateCaptcha = () => {
 
 const getCaptchaPayload = () => {
   return captchaMode.value === 'turnstile'
-    ? { captcha_token: turnstileToken.value }
-    : { captcha_code: captchaCode.value }
+    ? { 'cf-turnstile-response': turnstileToken.value } // <--- اصلاح نام کلید
+    : {
+        captcha_code: captchaCode.value,
+        captcha_key: localCaptchaKey.value, // <--- ارسال کلید همراه با کد
+      }
 }
 
 const refreshCaptcha = () => {
@@ -535,7 +539,9 @@ const loadLocalCaptcha = async () => {
   captchaMode.value = 'local'
   try {
     const response = await getLocalCaptchaApi()
+    // اصلاح شد: هر دو از یک سطح خوانده می‌شوند
     localCaptchaImage.value = response.data.img
+    localCaptchaKey.value = response.data.key
   } catch (error) {
     console.error('Local captcha failed to load', error)
   }

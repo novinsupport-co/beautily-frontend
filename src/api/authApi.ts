@@ -5,34 +5,37 @@ const RAW_BASE = (import.meta.env.VITE_BASE_URL || 'http://beautyshop.test').rep
   /\/api\/?$/,
   '',
 )
-
+// اضافه کردن یک اینترفیس پایه برای کپچا
+export interface CaptchaPayload {
+  'cf-turnstile-response'?: string
+  captcha_code?: string
+  captcha_key?: string
+}
 // 1. اطلاعات ورود ادمین (ایمیل/موبایل و پسورد)
-export interface AdminLoginPayload {
+// 1. اطلاعات ورود ادمین
+export interface AdminLoginPayload extends CaptchaPayload {
   email: string
   password: string
 }
 
 // 2. درخواست ارسال کد OTP (کاربر عادی)
-export interface SendOtpPayload {
+export interface SendOtpPayload extends CaptchaPayload {
   identifier: string // می‌تواند ایمیل یا موبایل باشد
-  captcha_token?: string
-  captcha_code?: string
 }
 
-// 3. تایید کد OTP (کاربر عادی)
+// 3. تایید کد OTP (کاربر عادی) - کپچا نیاز ندارد
 export interface VerifyOtpPayload {
   identifier: string
   code: string
-  name?: string // <--- این خط اضافه شود تا خطای تایپ‌اسکریپت برطرف گردد
+  name?: string
 }
 
-export interface RegisterPayload {
+// 4. ثبت‌نام
+export interface RegisterPayload extends CaptchaPayload {
   name: string
   email?: string
   password?: string
   password_confirmation?: string
-  captcha_token?: string
-  captcha_code?: string
 }
 
 export const getCsrfCookie = () => {
