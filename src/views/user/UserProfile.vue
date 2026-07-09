@@ -483,7 +483,7 @@ import {
   verifyMobileOtpApi
 } from '@/api/userApi'
 import { useNotificationStore } from '@/stores/notification'
-import { useConfirmStore } from '@/stores/confirm' // --- مقداردهی استورها ---
+import { useConfirmStore } from '@/stores/confirm'
 
 // --- مقداردهی استورها ---
 const notify = useNotificationStore()
