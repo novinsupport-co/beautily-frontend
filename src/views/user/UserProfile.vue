@@ -480,7 +480,7 @@ import {
   updateUserProfileApi,
   uploadAvatarApi,
   verifyEmailOtpApi,
-  verifyMobileOtpApi
+  verifyMobileOtpApi,
 } from '@/api/userApi'
 import { useNotificationStore } from '@/stores/notification'
 import { useConfirmStore } from '@/stores/confirm'
