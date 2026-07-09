@@ -128,7 +128,7 @@
                 <input
                   v-model="password"
                   :type="showPassword ? 'text' : 'password'"
-                  class="w-full pl-4 pr-12 py-3 text-sm bg-brand-neutral border border-transparent rounded-xl text-brand-dark outline-none"
+                  class="w-full pl-4 pr-12 py-3 text-sm bg-brand-neutral border border-transparent rounded-xl text-brand-dark focus:bg-brand-white focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/10 transition-all outline-none"
                   dir="ltr"
                   placeholder="••••••••"
                 />
@@ -156,7 +156,7 @@
                 <input
                   v-model="password_confirmation"
                   :type="showPasswordConfirm ? 'text' : 'password'"
-                  class="w-full pl-4 pr-12 py-3 text-sm bg-brand-neutral border border-transparent rounded-xl text-brand-dark outline-none"
+                  class="w-full pl-4 pr-12 py-3 text-sm bg-brand-neutral border border-transparent rounded-xl text-brand-dark focus:bg-brand-white focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/10 transition-all outline-none"
                   dir="ltr"
                   placeholder="••••••••"
                 />
@@ -225,32 +225,77 @@
           </div>
         </div>
 
-        <!-- ================= کپچا (فقط در مرحله اول یا پس از پایان تایمر) ================= -->
+        <!-- ================= کپچا (هوشمند با لودینگ) ================= -->
         <div v-show="!otpSent || countdown === 0" class="flex flex-col py-1">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-iransans-bold text-brand-dark">بررسی امنیتی</span>
+            <button
+              v-if="captchaMode === 'local' && !isCaptchaLoading"
+              class="text-xs font-iransans-bold text-brand-primary hover:text-brand-secondary transition-colors"
+              type="button"
+              @click="loadLocalCaptcha"
+            >
+              تغییر تصویر
+            </button>
+          </div>
+
+          <!-- حالت لودینگ (اسکلتون + اسپینر) -->
           <div
-            v-show="captchaMode === 'turnstile'"
-            id="turnstile-container"
-            class="min-h-[65px] flex justify-center"
-          ></div>
-          <div v-if="captchaMode === 'local'" class="w-full">
-            <div class="flex items-center justify-between mb-1.5">
-              <span class="text-xs font-iransans-bold text-brand-medium">کد امنیتی</span>
-              <button
-                class="text-xs font-iransans-bold text-brand-primary hover:text-brand-secondary transition-colors"
-                type="button"
-                @click="loadLocalCaptcha"
+            v-if="isCaptchaLoading"
+            class="flex flex-col items-center justify-center w-full h-12 bg-brand-neutral/40 border border-dashed border-brand-medium/30 rounded-xl animate-pulse"
+          >
+            <div class="flex items-center gap-2">
+              <svg
+                class="w-4 h-4 text-brand-primary animate-spin"
+                fill="none"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                تغییر تصویر
-              </button>
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+              <span class="text-xs font-iransans-medium text-brand-medium tracking-wide">
+                در حال ارتباط با سرور امنیتی...
+              </span>
             </div>
-            <div class="flex gap-4">
+          </div>
+
+          <!-- نمایش کپچاها پس از اتمام لودینگ -->
+          <div v-show="!isCaptchaLoading" class="w-full">
+            <div
+              v-show="captchaMode === 'turnstile'"
+              id="turnstile-container"
+              class="min-h-[65px] flex justify-center"
+            ></div>
+
+            <div v-if="captchaMode === 'local'" class="flex gap-4">
               <div
                 class="w-1/2 h-12 bg-brand-white border border-brand-neutral rounded-xl overflow-hidden flex items-center justify-center"
-                v-html="localCaptchaImage"
-              ></div>
+              >
+                <img
+                  v-if="localCaptchaImage"
+                  :src="localCaptchaImage"
+                  alt="کد امنیتی"
+                  class="object-contain w-full h-full cursor-pointer"
+                  title="برای تغییر تصویر کلیک کنید"
+                  @click="loadLocalCaptcha"
+                />
+              </div>
+
               <input
                 v-model="captchaCode"
-                class="w-1/2 px-4 py-3 text-center text-sm bg-brand-neutral border border-transparent rounded-xl text-brand-dark outline-none"
+                class="w-1/2 px-4 py-3 text-center text-sm bg-brand-neutral border border-transparent rounded-xl text-brand-dark focus:bg-brand-white focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/10 transition-all outline-none"
                 dir="ltr"
                 placeholder="کد تصویر"
                 type="text"
@@ -289,7 +334,7 @@
       </form>
     </div>
 
-    <!-- بخش گرافیکی حفظ شده است... -->
+    <!-- بخش گرافیکی -->
     <div
       class="hidden md:flex w-1/2 bg-brand-accent relative flex-col items-center justify-center overflow-hidden rounded-[2.5rem]"
     >
@@ -334,7 +379,6 @@ const loginBgUrl = ref<string | null>(null)
 
 const fetchLoginBackground = async () => {
   try {
-    // فرض بر این است که API شما کلید را می‌گیرد و اطلاعات را برمی‌گرداند
     const response = await getPublicSettingApi('register_bg')
     if (response.data?.image_url) {
       loginBgUrl.value = response.data.image_url
@@ -350,7 +394,6 @@ declare global {
   }
 }
 
-// تعریف دقیق ساختار فرم برای جلوگیری از خطاهای TypeScript
 interface RegisterForm {
   name: string
   mobile: string
@@ -367,6 +410,7 @@ const authStore = useAuthStore()
 const notify = useNotificationStore()
 
 const loading = ref(false)
+const isCaptchaLoading = ref(true) // متغیر کنترل وضعیت لودینگ کپچا
 const showPassword = ref(false)
 const showPasswordConfirm = ref(false)
 const activeTab = ref<'mobile' | 'email'>('mobile')
@@ -426,7 +470,6 @@ const schema = yup.object({
   }),
 })
 
-// مقداردهی اولیه تمام فیلدها برای حل مشکل Property does not exist
 const { handleSubmit, errors, setFieldValue, setErrors, resetForm } = useForm<RegisterForm>({
   validationSchema: schema,
   initialValues: {
@@ -461,40 +504,29 @@ const switchTab = (tab: 'mobile' | 'email') => {
   clearInterval(timerInterval!)
   countdown.value = 0
   setFieldValue('activeTab', tab)
-  setErrors({}) // پاک کردن خطاهای قبلی موقع تغییر تب
+  setErrors({})
   refreshCaptcha()
 }
 
 // ================= منطق کپچا =================
 const loadLocalCaptcha = async () => {
   captchaMode.value = 'local'
+  isCaptchaLoading.value = true // نمایش لودینگ
+  captchaCode.value = '' // خالی کردن فیلد حین لود
+
   try {
     const response = await getLocalCaptchaApi()
-    // اصلاح شد: هر دو از یک سطح خوانده می‌شوند
-    localCaptchaImage.value = response.data.img
-    localCaptchaKey.value = response.data.key
+    localCaptchaImage.value = response.data.captcha.img
+    localCaptchaKey.value = response.data.captcha.key
   } catch (error) {
     console.error('Local captcha failed to load', error)
-  }
-}
-
-const renderTurnstile = () => {
-  if (window.turnstile) {
-    window.turnstile.render('#turnstile-container', {
-      sitekey: turnstileSiteKey,
-      callback: (token: string) => {
-        turnstileToken.value = token
-      },
-      'error-callback': () => {
-        notify.error('خطا در بارگذاری کپچا')
-        loadLocalCaptcha() // سوییچ خودکار به لوکال در صورت قطعی
-      },
-    })
+  } finally {
+    isCaptchaLoading.value = false // پنهان کردن لودینگ
   }
 }
 
 const refreshCaptcha = () => {
-  captchaCode.value = ''
+  captchaCode.value = '' // همیشه فیلد رو خالی کن
   if (captchaMode.value === 'local') {
     loadLocalCaptcha()
   } else if (captchaMode.value === 'turnstile' && window.turnstile) {
@@ -504,7 +536,7 @@ const refreshCaptcha = () => {
 }
 
 const validateCaptcha = () => {
-  if (countdown.value > 0 && otpSent.value) return true // در زمان تایمر کپچا نیاز نیست
+  if (countdown.value > 0 && otpSent.value) return true
   if (captchaMode.value === 'turnstile' && !turnstileToken.value) {
     notify.error('لطفا کادر امنیتی را تایید کنید')
     return false
@@ -518,10 +550,10 @@ const validateCaptcha = () => {
 
 const getCaptchaPayload = () =>
   captchaMode.value === 'turnstile'
-    ? { 'cf-turnstile-response': turnstileToken.value } // <--- اصلاح نام کلید
+    ? { 'cf-turnstile-response': turnstileToken.value }
     : {
         captcha_code: captchaCode.value,
-        captcha_key: localCaptchaKey.value, // <--- ارسال کلید همراه با کد
+        captcha_key: localCaptchaKey.value,
       }
 
 // ================= منطق تایمر و فرم =================
@@ -548,7 +580,6 @@ const submitFirstStep = async (values: any) => {
     if (activeTab.value === 'mobile') {
       await sendOtpApi({ identifier: mobile.value, ...getCaptchaPayload() })
     } else {
-      // استفاده یکپارچه از API ثبت‌نام (جلوگیری از خطای 404)
       await registerApi({
         name: name.value,
         email: email.value,
@@ -578,7 +609,6 @@ const submitSecondStep = async () => {
         code: otpCode.value,
       })
     } else {
-      // استفاده یکپارچه از متد جدید استور (جلوگیری از خطای setAuth)
       await authStore.verifyEmailLogin({
         email: email.value,
         code: otpCode.value,
@@ -613,6 +643,7 @@ const handleError = (e: any) => {
 // ================= هوک‌ها =================
 onMounted(() => {
   fetchLoginBackground()
+  isCaptchaLoading.value = true // آغاز لودینگ در ابتدای Mount
 
   turnstileTimer = setTimeout(() => {
     if (captchaMode.value === 'turnstile') {
@@ -624,16 +655,17 @@ onMounted(() => {
           },
           'error-callback': () => {
             notify.error('خطا در بارگذاری کپچا')
-            loadLocalCaptcha() // سوییچ خودکار به لوکال در صورت قطعی
+            loadLocalCaptcha()
           },
         })
+        isCaptchaLoading.value = false // اگر Turnstile بارگذاری شد لودینگ خاموش می‌شود
       } else {
         loadLocalCaptcha()
       }
     } else {
       loadLocalCaptcha()
     }
-  }, 500)
+  }, 800) // تاخیر برای اطمینان از بارگذاری کلودفلر
 })
 
 onBeforeUnmount(() => {
