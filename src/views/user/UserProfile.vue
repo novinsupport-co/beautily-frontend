@@ -673,7 +673,18 @@ const handleAvatarUpload = async (event: Event) => {
   try {
     isUploadingAvatar.value = true
     const { data } = await uploadAvatarApi(formData)
-    avatarUrl.value = data.user?.avatar_url || data.avatar_url || null
+
+    // استخراج ایمن داده‌ها با در نظر گرفتن لایه اضافی data که لاراول ممکن است بفرستد
+    const responseData = data.data || data
+
+    // بروزرسانی URL آواتار
+    avatarUrl.value = responseData?.user?.avatar_url || responseData?.avatar_url || null
+
+    // برای اطمینان ۱۰۰٪ از سینک بودن اطلاعات، کل دیتای یوزر را مجدد فچ می‌کنیم
+    if (!avatarUrl.value) {
+      await fetchUserData()
+    }
+
     notify.success('تصویر پروفایل با موفقیت بروزرسانی شد.')
   } catch (error: any) {
     notify.error(error.response?.data?.message || 'حجم عکس نباید بیشتر از 2 مگابایت باشد.')
