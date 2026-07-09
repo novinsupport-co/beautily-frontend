@@ -399,7 +399,7 @@
         <form @submit.prevent="verifyOtp">
           <input
             v-model="otpCode"
-            class="w-full px-4 py-3 text-center tracking-[0.5em] text-xl rounded-xl border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none mb-6"
+            class="w-full px-4 py-3 text-center tracking-[0.5em] text-xl rounded-xl border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none mb-4"
             dir="ltr"
             maxlength="6"
             placeholder="------"
@@ -407,11 +407,31 @@
             type="text"
           />
 
+          <!-- بخش تایمر و ارسال مجدد -->
+          <div class="flex items-center justify-between mb-6 text-sm">
+            <span class="text-gray-500 dark:text-gray-400">کد را دریافت نکردید؟</span>
+            <button
+              v-if="timer === 0"
+              class="text-blue-600 dark:text-blue-400 hover:text-blue-700 font-bold transition-colors"
+              type="button"
+              @click="resendCode"
+            >
+              ارسال مجدد کد
+            </button>
+            <span
+              v-else
+              class="text-gray-700 dark:text-gray-300 font-medium tracking-widest"
+              dir="ltr"
+            >
+              {{ formattedTimer }}
+            </span>
+          </div>
+
           <div class="flex gap-3">
             <button
               class="flex-1 py-2.5 px-4 bg-gray-100 hover:bg-gray-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-200 rounded-xl transition-colors font-medium"
               type="button"
-              @click="showOtpModal = false"
+              @click="closeOtpModal"
             >
               انصراف
             </button>
@@ -450,7 +470,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import {
   changePasswordApi,
   deleteAvatarApi,
@@ -460,10 +480,10 @@ import {
   updateUserProfileApi,
   uploadAvatarApi,
   verifyEmailOtpApi,
-  verifyMobileOtpApi,
+  verifyMobileOtpApi
 } from '@/api/userApi'
 import { useNotificationStore } from '@/stores/notification'
-import { useConfirmStore } from '@/stores/confirm' // اضافه شدن استور دیالوگ تایید
+import { useConfirmStore } from '@/stores/confirm' // --- مقداردهی استورها ---
 
 // --- مقداردهی استورها ---
 const notify = useNotificationStore()
@@ -480,11 +500,23 @@ const isUploadingAvatar = ref(false)
 const isPhoneVerified = ref(false)
 const isEmailVerified = ref(false)
 
-// --- متغیرهای مودال OTP ---
+// --- متغیرهای مودال OTP و تایمر ---
 const showOtpModal = ref(false)
 const otpType = ref<'phone' | 'email'>('phone')
 const otpCode = ref('')
 const isVerifyingOtp = ref(false)
+
+const timer = ref(120) // ۲ دقیقه
+let timerInterval: any = null
+
+// فرمت کردن زمان (تبدیل ثانیه به MM:SS)
+const formattedTimer = computed(() => {
+  const minutes = Math.floor(timer.value / 60)
+    .toString()
+    .padStart(2, '0')
+  const seconds = (timer.value % 60).toString().padStart(2, '0')
+  return `${minutes}:${seconds}`
+})
 
 // --- وضعیت فرم اطلاعات شخصی ---
 const isSaving = ref(false)
@@ -509,6 +541,38 @@ const passForm = reactive({
   password_confirmation: '',
 })
 
+// --- توابع تایمر ---
+const startTimer = () => {
+  stopTimer()
+  timer.value = 120
+  timerInterval = setInterval(() => {
+    if (timer.value > 0) {
+      timer.value--
+    } else {
+      stopTimer()
+    }
+  }, 1000)
+}
+
+const stopTimer = () => {
+  if (timerInterval) {
+    clearInterval(timerInterval)
+    timerInterval = null
+  }
+}
+
+// در صورت از بین رفتن کامپوننت تایمر باید متوقف شود
+onUnmounted(() => {
+  stopTimer()
+})
+
+// --- بستن مودال ---
+const closeOtpModal = () => {
+  showOtpModal.value = false
+  otpCode.value = ''
+  stopTimer()
+}
+
 // --- دریافت اطلاعات اولیه از سرور ---
 const fetchUserData = async () => {
   try {
@@ -523,7 +587,6 @@ const fetchUserData = async () => {
     form.nationalCode = userData.national_code || ''
     avatarUrl.value = userData.avatar_url || null
 
-    // بررسی اینکه آیا قبلا تایید شده‌اند یا خیر
     isPhoneVerified.value = !!userData.mobile_verified_at
     isEmailVerified.value = !!userData.email_verified_at
   } catch (error: any) {
@@ -539,7 +602,6 @@ onMounted(() => {
   fetchUserData()
 })
 
-// --- تابع صحت سنجی الگوریتم کد ملی ایران ---
 const isValidIranianNationalCode = (code: string): boolean => {
   if (!/^\d{10}$/.test(code)) return false
 
@@ -556,7 +618,7 @@ const isValidIranianNationalCode = (code: string): boolean => {
 const requestVerification = async (type: 'phone' | 'email') => {
   try {
     otpType.value = type
-    otpCode.value = ''
+    otpCode.value = '' // خالی کردن فیلد
 
     if (type === 'phone') {
       await requestMobileVerifyApi({ mobile: form.phone })
@@ -565,9 +627,17 @@ const requestVerification = async (type: 'phone' | 'email') => {
     }
 
     showOtpModal.value = true
+    startTimer() // شروع یا ریست کردن تایمر
     notify.success('کد تایید با موفقیت ارسال شد.')
   } catch (error: any) {
     notify.error(error.response?.data?.message || 'خطا در ارسال کد تایید')
+  }
+}
+
+// --- درخواست ارسال مجدد کد ---
+const resendCode = () => {
+  if (timer.value === 0) {
+    requestVerification(otpType.value)
   }
 }
 
@@ -583,7 +653,7 @@ const verifyOtp = async () => {
       isEmailVerified.value = true
     }
 
-    showOtpModal.value = false
+    closeOtpModal() // بستن مودال و پاک‌سازی تایمر/فیلد
     notify.success('حساب شما با موفقیت تایید شد.')
   } catch (error: any) {
     notify.error(error.response?.data?.message || 'کد وارد شده اشتباه است.')
@@ -592,7 +662,6 @@ const verifyOtp = async () => {
   }
 }
 
-// --- هندل کردن آپلود عکس ---
 const handleAvatarUpload = async (event: Event) => {
   const target = event.target as HTMLInputElement
   if (!target.files?.length) return
@@ -614,9 +683,7 @@ const handleAvatarUpload = async (event: Event) => {
   }
 }
 
-// --- هندل کردن حذف عکس با استفاده از ConfirmDialog ---
 const removeAvatar = async () => {
-  // فراخوانی دیالوگ سفارشی به صورت ناهمگام
   const isConfirmed = await confirmStore.ask({
     title: 'حذف تصویر پروفایل',
     message: 'آیا از حذف تصویر پروفایل خود اطمینان دارید؟ این عملیات غیرقابل بازگشت است.',
@@ -625,7 +692,6 @@ const removeAvatar = async () => {
     cancelText: 'انصراف',
   })
 
-  // اگر کاربر انصراف داد، عملیات متوقف می‌شود
   if (!isConfirmed) return
 
   try {
@@ -640,7 +706,6 @@ const removeAvatar = async () => {
   }
 }
 
-// --- ذخیره اطلاعات شخصی ---
 const saveProfile = async () => {
   nationalCodeError.value = ''
 
@@ -652,7 +717,6 @@ const saveProfile = async () => {
   try {
     isSaving.value = true
 
-    // ایمیل و شماره همراه تنها توسط روت‌های Verify آپدیت می‌شوند.
     await updateUserProfileApi({
       name: form.name,
       national_code: form.nationalCode,
@@ -667,7 +731,6 @@ const saveProfile = async () => {
   }
 }
 
-// --- تغییر رمز عبور ---
 const changePassword = async () => {
   if (passForm.password !== passForm.password_confirmation) {
     notify.error('رمز عبور جدید و تکرار آن یکسان نیستند.')
