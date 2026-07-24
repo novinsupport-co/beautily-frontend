@@ -52,6 +52,8 @@
                 :allCategories="categories"
                 :brands="brands"
                 :form="form"
+                :ingredients="ingredients"
+                :trustBadges="trustBadges"
                 @update-catalog="handleCatalogFileUpdate"
               />
             </KeepAlive>
@@ -92,7 +94,11 @@ import TabTechnicalSpecs from './tabs/TabTechnicalSpecs.vue'
 import TabVariants from './tabs/TabVariants.vue'
 import TabRelated from './tabs/TabRelated.vue'
 import LivePreview from './components/LivePreview.vue'
+import TabSeo from './tabs/TabSeo.vue'
+import TabExpertise from './tabs/TabExpertise.vue'
 
+const ingredients = ref<any[]>([])
+const trustBadges = ref<any[]>([])
 const route = useRoute()
 const router = useRouter()
 const notify = useNotificationStore()
@@ -123,7 +129,12 @@ const form = reactive({
   variants: [] as any[],
   related_ids: [] as number[],
   related_products: [] as any[],
-  seo: { title: '', description: '' },
+  seo: {
+    title: '',
+    description: '',
+    canonical_url: '',
+    robots: 'index, follow',
+  },
   new_thumbnail: null as File | null,
   preview_url: '',
   new_gallery_files: [] as File[],
@@ -132,13 +143,21 @@ const form = reactive({
   short_description: '',
   long_description: '',
   catalog_url: '',
+  thumbnail_alt: '', // اضافه شود
+  gallery_alts: [] as string[], //
+  expert_review: '',
+  how_to_use: '',
+  ingredient_ids: [] as number[],
+  trust_badge_ids: [] as number[], // اضافه شود
 })
 
 const tabs = [
   { id: 'basic', label: 'اطلاعات اصلی', component: TabBasicInfo },
+  { id: 'expertise', label: 'نقد و بررسی', component: TabExpertise },
   { id: 'specs', label: 'مشخصات فنی', component: TabTechnicalSpecs },
   { id: 'variants', label: 'متغیرها', component: TabVariants },
   { id: 'related', label: 'مرتبط‌ها', component: TabRelated },
+  { id: 'seo', label: 'سئو', component: TabSeo },
 ]
 
 const currentTabComponent = computed(() => tabs.find((t) => t.id === activeTab.value)?.component)
@@ -170,15 +189,19 @@ watch(
 
 const fetchInitialData = async () => {
   try {
-    const [prodRes, catRes, brandRes] = await Promise.all([
+    const [prodRes, catRes, brandRes, ingRes, badgeRes] = await Promise.all([
       axios.get(`/admin/products/${productId}`),
       axios.get('/admin/categories'),
       axios.get('/admin/brands'),
+      axios.get('/admin/ingredients'),
+      axios.get('/admin/trust-badges'),
     ])
 
     const p = prodRes.data.data
     categories.value = catRes.data.data
     brands.value = brandRes.data.data
+    ingredients.value = ingRes.data.data
+    trustBadges.value = badgeRes.data.data
 
     Object.assign(form, {
       name: p.name || '',
@@ -205,10 +228,18 @@ const fetchInitialData = async () => {
       long_description: p.long_description || '',
       slug: p.slug || '',
       catalog_url: p.catalog_url || '',
+      thumbnail_alt: p.images?.thumbnail?.alt || p.name || '', // این خط اضافه شود
+      gallery_alts: p.images?.gallery?.map((img: any) => img.alt || p.name) || [], // این خط اضافه شود
       seo: {
         title: p.meta?.title || '',
         description: p.meta?.description || '',
+        canonical_url: p.meta?.canonical_url || '',
+        robots: p.meta?.robots || 'index, follow',
       },
+      expert_review: p.expert_review || null,
+      how_to_use: p.how_to_use || null,
+      ingredient_ids: p.ingredients?.data || p.ingredients || [],
+      trust_badge_ids: p.trust_badges?.data || p.trust_badges || [],
     })
   } catch (error) {
     notify.error('خطا در بارگذاری اطلاعات محصول')
@@ -233,39 +264,51 @@ const submitAllData = async () => {
     fd.append('short_description', form.short_description || '')
     fd.append('long_description', form.long_description || '')
     fd.append('brand_id', form.brand_id ? String(form.brand_id) : '')
+
+    // ارسال آرایه‌ها به صورت JSON String (بک‌اند این‌ها را دیکود می‌کند)
     fd.append('specifications', JSON.stringify(form.specifications))
     fd.append('variants', JSON.stringify(form.variants))
-    fd.append('meta[title]', form.seo.title || '')
-    fd.append('meta[description]', form.seo.description || '')
-
-    if (form.category_ids.length > 0) {
-      form.category_ids.forEach((id, i) => fd.append(`category_ids[${i}]`, String(id)))
-    } else {
-      // ارسال یک آرایه خالی برای اینکه بک‌ند بفهمد همه حذف شده‌اند
-      fd.append('category_ids', '')
-    }
-    if (form.tag_names.length > 0) {
-      form.tag_names.forEach((tag, i) => fd.append(`tag_names[${i}]`, tag))
-    } else {
-      // ارسال مقدار خالی برای حذف تگ‌ها در سمت سرور
-      fd.append('tag_names', '')
-    }
+    fd.append('ingredients', JSON.stringify(form.ingredient_ids))
+    fd.append('trust_badges', JSON.stringify(form.trust_badge_ids))
+    fd.append('category_ids', JSON.stringify(form.category_ids))
+    fd.append('tag_names', JSON.stringify(form.tag_names))
+    fd.append('related_ids', JSON.stringify(form.related_ids || []))
 
     const existingGalleryIds = form.images.gallery.map((img: any) => img.id)
-    existingGalleryIds.forEach((id, i) => fd.append(`existing_gallery_ids[${i}]`, String(id)))
+    fd.append('existing_gallery_ids', JSON.stringify(existingGalleryIds))
+
+    fd.append('meta[title]', form.seo.title || '')
+    fd.append('meta[description]', form.seo.description || '')
+    fd.append('meta[canonical_url]', form.seo.canonical_url || '')
+    fd.append('meta[robots]', form.seo.robots || 'index, follow')
+    fd.append('expert_review', form.expert_review || '')
+    fd.append('how_to_use', form.how_to_use || '')
 
     if (rawCatalogFile.value instanceof File) fd.append('catalog_file', rawCatalogFile.value)
-    if (form.new_thumbnail instanceof File) fd.append('thumbnail', form.new_thumbnail)
-    if (form.new_gallery_files.length > 0) {
-      form.new_gallery_files.forEach((file) => fd.append('gallery[]', file))
+    fd.append('thumbnail_alt', form.thumbnail_alt || form.name)
+
+    if (form.new_thumbnail instanceof File) {
+      fd.append('thumbnail', form.new_thumbnail)
     }
-    fd.append('related_ids', JSON.stringify(form.related_ids || []))
+
+    if (form.new_gallery_files.length > 0) {
+      form.new_gallery_files.forEach((file, index) => {
+        fd.append('gallery[]', file)
+        fd.append(`gallery_alts[${index}]`, form.gallery_alts[index] || form.name)
+      })
+    }
 
     await axios.post(`/admin/products/${productId}`, fd)
     notify.success('تغییرات محصول با موفقیت ذخیره شد')
     router.push('/admin/products')
   } catch (e: any) {
-    notify.error('خطا در ثبت تغییرات')
+    if (e.response && e.response.status === 422) {
+      const errors = e.response.data.errors
+      const firstErrorKey = Object.keys(errors)[0]
+      notify.error(`خطا: ${errors[firstErrorKey][0]}`)
+    } else {
+      notify.error('خطا در ثبت تغییرات')
+    }
   } finally {
     isSaving.value = false
   }

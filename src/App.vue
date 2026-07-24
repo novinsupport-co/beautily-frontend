@@ -1,51 +1,52 @@
 <template>
-  <router-view />
-  <Notifications />
-  <ConfirmDialog />
+  <div id="app-root">
+    <router-view />
+    <Notifications />
+    <ConfirmDialog />
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue'
 import Notifications from '@/components/NotifAndConfim/Notifications.vue'
 import ConfirmDialog from '@/components/NotifAndConfim/ConfirmDialog.vue'
+import { onMounted } from 'vue'
+import { useSiteSettingsStore } from '@/stores/siteSettings'
 import { getPublicSettingApi } from '@/api/settingApi'
-import { loadDynamicLogo } from '@/composables/useSettingsLogoSite'
 
-// تابع دریافت و اعمال فاوآیکون داینامیک
-const loadDynamicFavicon = async () => {
+const settingsStore = useSiteSettingsStore()
+
+const applyDynamicFavicon = (faviconUrl?: string) => {
+  if (!faviconUrl) return
+
+  const existingIcons = document.querySelectorAll("link[rel*='icon']")
+  existingIcons.forEach((icon) => document.head.removeChild(icon))
+
+  const link = document.createElement('link')
+  link.rel = 'icon'
+
+  const extension = faviconUrl.split('.').pop()?.toLowerCase()
+  link.type = extension === 'png' ? 'image/png' : 'image/x-icon'
+
+  link.href = `${faviconUrl}?v=${new Date().getTime()}`
+  document.head.appendChild(link)
+}
+
+const fetchAndApplyFavicon = async () => {
   try {
     const response = await getPublicSettingApi('site_favicon')
-
-    // بر اساس دیتای بک‌اند شما، احتمالاً فیلد حاوی آدرس `image_url` است.
-    // از هر دو فیلد برای اطمینان پشتیبانی می‌کنیم.
-    const faviconUrl = response?.data?.image_url || response?.data?.url
-
-    if (faviconUrl) {
-      // ۱. پیدا کردن و حذف کردن تمام تگ‌های فاوآیکون قبلی (برای جلوگیری از تداخل)
-      const existingIcons = document.querySelectorAll("link[rel*='icon']")
-      existingIcons.forEach((icon) => document.head.removeChild(icon))
-
-      // ۲. ساخت تگ فاوآیکون جدید
-      const link = document.createElement('link')
-      link.rel = 'icon'
-
-      // تشخیص فرمت فایل بر اساس پسوند برای type (اختیاری اما استانداردتر)
-      const extension = faviconUrl.split('.').pop()?.toLowerCase()
-      link.type = extension === 'png' ? 'image/png' : 'image/x-icon'
-
-      // ۳. اضافه کردن یک پارامتر زمان به انتهای آدرس برای دور زدن کش مرورگر (Cache-Buster)
-      link.href = `${faviconUrl}?v=${new Date().getTime()}`
-
-      // ۴. اضافه کردن تگ جدید به هدر
-      document.head.appendChild(link)
+    if (response.data?.image_url) {
+      applyDynamicFavicon(response.data.image_url)
     }
   } catch (error) {
-    console.error('Error loading favicon:', error)
+    console.error('Failed to load site favicon', error)
   }
 }
 
-onMounted(() => {
-  loadDynamicFavicon()
-  loadDynamicLogo()
+onMounted(async () => {
+  if (Object.keys(settingsStore.settings).length === 0) {
+    await settingsStore.fetchSettings()
+  }
+
+  await fetchAndApplyFavicon()
 })
 </script>

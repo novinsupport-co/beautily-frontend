@@ -1,21 +1,16 @@
 <template>
   <div
-    class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12"
+    class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 bg-[#FDFBF9] min-h-screen"
     dir="rtl"
     style="font-family: 'Vazirmatn', 'Vazir', sans-serif"
   >
     <!-- هدر صفحه -->
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 gap-6">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-6">
       <div class="flex items-center gap-4">
         <div
-          class="w-14 h-14 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl flex items-center justify-center shadow-sm"
+          class="w-14 h-14 bg-[#F57A9B]/10 border border-[#F57A9B]/20 rounded-2xl flex items-center justify-center shadow-sm"
         >
-          <svg
-            class="w-7 h-7 text-gray-700 dark:text-gray-300"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg class="w-7 h-7 text-[#F57A9B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
               stroke-linecap="round"
@@ -25,20 +20,18 @@
           </svg>
         </div>
         <div>
-          <h1
-            class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight"
-          >
-            مقایسه کالاها
+          <h1 class="text-2xl md:text-3xl font-extrabold text-[#333333] tracking-tight">
+            مقایسه محصولات
           </h1>
-          <p class="text-sm md:text-base text-gray-500 dark:text-gray-400 mt-1.5">
-            بررسی و مقایسه دقیق مشخصات فنی و قیمت محصولات
+          <p class="text-sm md:text-base text-[#777777] mt-1.5">
+            بررسی دقیق مشخصات فنی برای خریدی هوشمندانه‌تر
           </p>
         </div>
       </div>
 
       <button
         v-if="items.length > 0"
-        class="group flex items-center gap-2 px-5 py-2.5 text-gray-600 hover:text-red-600 bg-white hover:bg-red-50 border border-gray-200 hover:border-red-200 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-red-500/10 dark:text-gray-300 rounded-xl font-bold transition-all duration-300 shadow-sm"
+        class="group flex items-center gap-2 px-5 py-2.5 text-[#777777] hover:text-red-500 bg-white hover:bg-red-50 border border-gray-200 hover:border-red-200 rounded-xl font-bold transition-all duration-300 shadow-sm"
         @click="compareStore.clearCompare()"
       >
         <svg
@@ -54,24 +47,22 @@
             stroke-width="2"
           />
         </svg>
-        حذف همه لیست
+        پاکسازی لیست
       </button>
     </div>
 
     <!-- حالت خالی (Empty State) -->
     <div
       v-if="items.length === 0"
-      class="flex flex-col items-center justify-center py-24 bg-white dark:bg-gray-900 rounded-3xl shadow-sm border border-gray-200 dark:border-gray-800"
+      class="flex flex-col items-center justify-center py-24 bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-[#EEDAC5]/30"
     >
       <div class="w-32 h-32 mb-6 relative">
+        <div class="absolute inset-0 bg-[#DFA9C7]/20 rounded-full animate-ping opacity-50"></div>
         <div
-          class="absolute inset-0 bg-gray-100 dark:bg-gray-800 rounded-full animate-ping opacity-50"
-        ></div>
-        <div
-          class="relative w-full h-full bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-full flex items-center justify-center shadow-inner"
+          class="relative w-full h-full bg-[#F5F5F7] border border-[#EEDAC5] rounded-full flex items-center justify-center shadow-inner"
         >
           <svg
-            class="w-14 h-14 text-gray-300 dark:text-gray-600"
+            class="w-14 h-14 text-[#BC846C]/60"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -85,36 +76,35 @@
           </svg>
         </div>
       </div>
-      <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">لیست مقایسه خالی است!</h3>
-      <p class="text-gray-500 dark:text-gray-400 mb-8 text-center max-w-md leading-relaxed">
-        برای بررسی تفاوت‌ها و امکانات، محصولات مورد نظر خود را از فروشگاه به لیست مقایسه اضافه کنید.
+      <h3 class="text-2xl font-bold text-[#333333] mb-3">لیست مقایسه خالی است!</h3>
+      <p class="text-[#777777] mb-8 text-center max-w-md leading-relaxed">
+        محصولات زیبایی مورد نظر خود را از فروشگاه انتخاب کنید تا تفاوت‌ها را در یک نگاه ببینید.
       </p>
       <router-link
-        class="px-8 py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl shadow-lg shadow-red-600/20 transform hover:-translate-y-0.5 transition-all duration-300"
+        class="px-8 py-3.5 bg-[#F57A9B] hover:bg-[#DFA9C7] text-white font-bold rounded-2xl shadow-lg shadow-[#F57A9B]/30 transform hover:-translate-y-1 transition-all duration-300"
         to="/products"
       >
-        مشاهده فروشگاه
+        بازگشت به فروشگاه
       </router-link>
     </div>
 
     <!-- جدول مقایسه -->
     <div
       v-else
-      class="bg-white dark:bg-gray-900 rounded-3xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden relative"
+      class="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-[#EEDAC5]/30 overflow-hidden relative"
     >
-      <!-- کانتینر اسکرول افقی برای موبایل -->
       <div class="overflow-x-auto custom-scrollbar relative z-10">
-        <table class="w-full text-right border-collapse min-w-[900px] table-fixed">
-          <!-- هدر جدول (چسبان به بالا) -->
-          <thead class="bg-white dark:bg-gray-900">
+        <table class="w-full text-right border-collapse table-fixed min-w-[800px]">
+          <!-- هدر جدول (محصولات) -->
+          <thead>
             <tr>
-              <!-- ستون عناوین (چسبان به راست و بالا) -->
+              <!-- ستون ثابت عناوین -->
               <th
-                class="sticky-top-right p-6 bg-gray-50 dark:bg-gray-800/80 border-b border-l border-gray-200 dark:border-gray-700 w-[220px] align-top shadow-[2px_0_5px_rgba(0,0,0,0.02)]"
+                class="sticky-top-right p-6 bg-[#FDFBF9] border-b border-l border-[#EEDAC5]/30 w-[180px] md:w-[220px] align-top shadow-[4px_0_12px_rgba(0,0,0,0.03)] z-30"
               >
-                <div class="text-gray-900 dark:text-white font-black text-xl mb-2">مشخصات</div>
-                <div class="text-sm text-gray-500 dark:text-gray-400 font-normal leading-relaxed">
-                  تفاوت‌ها را با دقت بررسی کنید
+                <div class="text-[#333333] font-black text-lg md:text-xl mb-2">مشخصات</div>
+                <div class="text-xs md:text-sm text-[#777777] font-normal leading-relaxed">
+                  تفاوت‌ها را بررسی کنید
                 </div>
               </th>
 
@@ -122,230 +112,156 @@
               <th
                 v-for="product in items"
                 :key="product.id"
-                class="sticky-top p-5 border-b border-l last:border-l-0 border-gray-200 dark:border-gray-700 w-[300px] align-top bg-white dark:bg-gray-900 group"
+                class="sticky-top p-4 md:p-6 border-b border-l last:border-l-0 border-[#EEDAC5]/30 min-w-[260px] md:w-[320px] align-top bg-white group"
               >
-                <!-- دکمه حذف محصول -->
-                <button
-                  class="absolute top-4 left-4 z-10 w-9 h-9 flex items-center justify-center text-gray-400 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl shadow-sm transition-all duration-300"
-                  title="حذف از لیست"
-                  @click="compareStore.removeItem(product.id)"
+                <div
+                  class="relative bg-[#F5F5F7] rounded-2xl p-4 transition-all duration-300 hover:shadow-md border border-transparent hover:border-[#F57A9B]/20"
                 >
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      d="M6 18L18 6M6 6l12 12"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                    />
-                  </svg>
-                </button>
+                  <!-- دکمه حذف -->
+                  <button
+                    class="absolute top-2 left-2 z-10 w-8 h-8 flex items-center justify-center text-[#777777] bg-white border border-gray-200 hover:border-red-400 hover:text-red-500 rounded-lg shadow-sm transition-all duration-300 opacity-0 group-hover:opacity-100"
+                    title="حذف از لیست"
+                    @click="compareStore.removeItem(product.id)"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M6 18L18 6M6 6l12 12"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                      />
+                    </svg>
+                  </button>
 
-                <!-- تصویر -->
-                <router-link
-                  :to="`/product/${product.slug}`"
-                  class="block mb-4 relative bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl overflow-hidden group-hover:border-gray-300 dark:group-hover:border-gray-600 transition-colors duration-300"
-                >
-                  <img
-                    :alt="product.name"
-                    :src="getProductImage(product)"
-                    class="w-full h-52 object-contain p-4 transform group-hover:scale-105 transition-transform duration-500"
-                  />
-                </router-link>
-
-                <!-- نام محصول -->
-                <h3
-                  class="text-base font-bold text-gray-900 dark:text-white mb-4 line-clamp-2 leading-relaxed min-h-[3rem]"
-                >
                   <router-link
                     :to="`/product/${product.slug}`"
-                    class="hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                    class="block mb-4 overflow-hidden rounded-xl bg-white"
                   >
-                    {{ product.name }}
+                    <img
+                      :alt="product.name"
+                      :src="getProductImage(product)"
+                      class="w-full h-40 md:h-48 object-contain p-2 mix-blend-multiply transform group-hover:scale-105 transition-transform duration-500"
+                    />
                   </router-link>
-                </h3>
 
-                <!-- بخش قیمت گذاری کامل -->
-                <div
-                  class="pt-4 border-t border-gray-100 dark:border-gray-800 h-[88px] flex flex-col justify-end"
-                >
-                  <div
-                    v-if="isCallForPrice(product)"
-                    class="text-gray-900 dark:text-white font-black text-xl text-left w-full"
+                  <h3
+                    class="text-sm md:text-base font-bold text-[#333333] mb-4 line-clamp-2 leading-relaxed min-h-[3rem]"
                   >
-                    تماس بگیرید
-                  </div>
-                  <div
-                    v-else-if="getFinalPrice(product)"
-                    class="flex flex-col gap-1 w-full text-left"
-                  >
-                    <!-- قیمت اصلی و درصد تخفیف -->
-                    <div class="flex items-center justify-end gap-2 h-6">
-                      <span
-                        v-if="getDiscount(product) > 0"
-                        class="text-sm text-gray-400 dark:text-gray-500 line-through"
-                      >
-                        {{ formatPrice(getBasePrice(product)) }}
-                      </span>
-                      <span
-                        v-if="getDiscount(product) > 0"
-                        class="px-2 py-0.5 bg-red-600 text-white text-xs font-bold rounded-lg tracking-wide"
-                      >
-                        {{ getDiscount(product) }}٪
-                      </span>
-                    </div>
-                    <!-- قیمت نهایی -->
-                    <div
-                      class="text-gray-900 dark:text-white font-black text-2xl flex items-center justify-end gap-1"
+                    <router-link
+                      :to="`/product/${product.slug}`"
+                      class="hover:text-[#F57A9B] transition-colors"
                     >
-                      {{ formatPrice(getFinalPrice(product)) }}
-                      <span class="text-xs font-normal text-gray-500 dark:text-gray-400"
-                        >تومان</span
-                      >
+                      {{ product.name }}
+                    </router-link>
+                  </h3>
+
+                  <div class="pt-4 border-t border-gray-200 h-[80px] flex flex-col justify-end">
+                    <div v-if="isCallForPrice(product)" class="text-[#333333] font-black text-lg">
+                      تماس بگیرید
                     </div>
-                  </div>
-                  <div v-else class="text-gray-400 text-base font-normal text-left w-full">
-                    نامشخص
+                    <div
+                      v-else-if="getFinalPrice(product)"
+                      class="flex flex-col gap-1 w-full text-left"
+                    >
+                      <div class="flex items-center justify-end gap-2 h-6">
+                        <span
+                          v-if="getDiscount(product) > 0"
+                          class="text-xs text-[#777777] line-through"
+                        >
+                          {{ formatPrice(getBasePrice(product)) }}
+                        </span>
+                        <span
+                          v-if="getDiscount(product) > 0"
+                          class="px-2 py-0.5 bg-[#F57A9B] text-white text-[10px] font-bold rounded-lg"
+                        >
+                          {{ getDiscount(product) }}٪
+                        </span>
+                      </div>
+                      <div
+                        class="text-[#333333] font-black text-xl flex items-center justify-end gap-1"
+                      >
+                        {{ formatPrice(getFinalPrice(product)) }}
+                        <span class="text-[10px] font-normal text-[#777777]">تومان</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </th>
             </tr>
           </thead>
 
-          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-            <!-- ردیف امتیاز و نظرات -->
-            <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors">
+          <tbody class="divide-y divide-[#EEDAC5]/30">
+            <!-- ردیف امتیاز -->
+            <tr class="hover:bg-[#FDFBF9] transition-colors">
               <td
-                class="sticky-right p-5 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 font-bold border-l border-gray-200 dark:border-gray-700 text-sm shadow-[2px_0_5px_rgba(0,0,0,0.02)]"
+                class="sticky-right p-4 md:p-5 bg-white text-[#333333] font-bold border-l border-[#EEDAC5]/30 text-xs md:text-sm shadow-[4px_0_12px_rgba(0,0,0,0.02)] z-20"
               >
-                امتیاز و دیدگاه‌ها
+                امتیاز کاربران
               </td>
               <td
                 v-for="product in items"
                 :key="`rating-${product.id}`"
-                class="p-5 border-l border-gray-200 dark:border-gray-800"
+                class="p-4 md:p-5 border-l border-[#EEDAC5]/30"
               >
-                <div class="flex items-center gap-3">
-                  <!-- ستاره و امتیاز -->
-                  <div
-                    class="flex items-center gap-1 bg-amber-50 dark:bg-amber-500/10 px-2 py-1 rounded-md"
-                  >
+                <div class="flex items-center gap-2">
+                  <div class="flex items-center gap-1 bg-[#E9DDD2]/40 px-2.5 py-1 rounded-lg">
                     <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
                       <path
                         d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
                       />
                     </svg>
-                    <span class="text-amber-600 dark:text-amber-400 font-bold text-sm pt-0.5">{{
+                    <span class="text-amber-700 font-bold text-sm">{{
                       product.rating || '۰'
                     }}</span>
-                  </div>
-                  <!-- تعداد نظر و سوال -->
-                  <div class="flex flex-col text-xs text-gray-500 dark:text-gray-400 gap-1">
-                    <span>{{ product.reviews_count || 0 }} نظر کاربران</span>
-                    <span>{{ product.questions_count || 0 }} پرسش و پاسخ</span>
                   </div>
                 </div>
               </td>
             </tr>
 
-            <!-- ردیف دسته‌بندی (اصلاح شده) -->
-            <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors">
+            <!-- ردیف برند -->
+            <tr class="hover:bg-[#FDFBF9] transition-colors">
               <td
-                class="sticky-right p-5 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 font-bold border-l border-gray-200 dark:border-gray-700 text-sm shadow-[2px_0_5px_rgba(0,0,0,0.02)]"
-              >
-                دسته‌بندی
-              </td>
-              <td
-                v-for="product in items"
-                :key="`cat-${product.id}`"
-                class="p-5 border-l border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 text-sm"
-              >
-                <span
-                  class="inline-flex px-3 py-1.5 bg-gray-100 dark:bg-gray-800 rounded-lg font-medium"
-                >
-                  <!-- تغییر داده شده به primary_category -->
-                  {{ product.primary_category?.name || 'بدون دسته‌بندی' }}
-                </span>
-              </td>
-            </tr>
-
-            <!-- ردیف برند (اضافه شده) -->
-            <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors">
-              <td
-                class="sticky-right p-5 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 font-bold border-l border-gray-200 dark:border-gray-700 text-sm shadow-[2px_0_5px_rgba(0,0,0,0.02)]"
+                class="sticky-right p-4 md:p-5 bg-white text-[#333333] font-bold border-l border-[#EEDAC5]/30 text-xs md:text-sm shadow-[4px_0_12px_rgba(0,0,0,0.02)] z-20"
               >
                 برند
               </td>
               <td
                 v-for="product in items"
                 :key="`brand-${product.id}`"
-                class="p-5 border-l border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 text-sm"
+                class="p-4 md:p-5 border-l border-[#EEDAC5]/30"
               >
                 <span
                   v-if="product.brand"
-                  class="inline-flex px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-lg font-medium"
+                  class="inline-flex px-3 py-1.5 bg-gray-50 text-[#333333] border border-gray-100 rounded-lg text-sm font-medium"
                 >
                   {{ product.brand.name }}
                 </span>
-                <span v-else class="text-gray-400">بدون برند</span>
+                <span v-else class="text-[#777777] text-sm">نامشخص</span>
               </td>
             </tr>
 
-            <!-- ردیف برچسب‌ها (اضافه شده) -->
-            <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors">
+            <!-- ردیف موجودی -->
+            <tr class="hover:bg-[#FDFBF9] transition-colors">
               <td
-                class="sticky-right p-5 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 font-bold border-l border-gray-200 dark:border-gray-700 text-sm shadow-[2px_0_5px_rgba(0,0,0,0.02)]"
+                class="sticky-right p-4 md:p-5 bg-white text-[#333333] font-bold border-l border-[#EEDAC5]/30 text-xs md:text-sm shadow-[4px_0_12px_rgba(0,0,0,0.02)] z-20"
               >
-                برچسب‌ها
-              </td>
-              <td
-                v-for="product in items"
-                :key="`tags-${product.id}`"
-                class="p-5 border-l border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 text-sm"
-              >
-                <div v-if="product.tags && product.tags.length > 0" class="flex flex-wrap gap-2">
-                  <span
-                    v-for="tag in product.tags"
-                    :key="tag.id"
-                    class="px-2.5 py-1 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md text-xs font-medium text-gray-600 dark:text-gray-300"
-                  >
-                    {{ tag.name }}
-                  </span>
-                </div>
-                <span v-else class="text-gray-400">بدون برچسب</span>
-              </td>
-            </tr>
-
-            <!-- ردیف وضعیت موجودی -->
-            <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors">
-              <td
-                class="sticky-right p-5 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 font-bold border-l border-gray-200 dark:border-gray-700 text-sm shadow-[2px_0_5px_rgba(0,0,0,0.02)]"
-              >
-                وضعیت کالا
+                وضعیت
               </td>
               <td
                 v-for="product in items"
                 :key="`stock-${product.id}`"
-                class="p-5 border-l border-gray-200 dark:border-gray-800"
+                class="p-4 md:p-5 border-l border-[#EEDAC5]/30"
               >
                 <div
                   v-if="hasStock(product)"
-                  class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg font-bold text-sm"
+                  class="inline-flex items-center gap-2 px-3 py-1.5 bg-[#EEDAC5]/20 text-[#BC846C] rounded-lg font-bold text-xs md:text-sm"
                 >
-                  <span class="relative flex h-2.5 w-2.5">
-                    <span
-                      class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"
-                    ></span>
-                    <span
-                      class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"
-                    ></span>
-                  </span>
-                  موجود در انبار
+                  موجود در فروشگاه
                 </div>
                 <div
                   v-else
-                  class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-lg font-bold text-sm"
+                  class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 text-[#777777] rounded-lg font-bold text-xs md:text-sm"
                 >
-                  <span class="w-2.5 h-2.5 rounded-full bg-gray-400 dark:bg-gray-500"></span>
                   ناموجود
                 </div>
               </td>
@@ -355,45 +271,35 @@
             <tr>
               <td
                 :colspan="items.length + 1"
-                class="bg-gray-50 dark:bg-gray-800 border-y border-gray-200 dark:border-gray-700 py-3 px-5 text-gray-800 dark:text-white font-black text-sm"
+                class="bg-[#F5F5F7] border-y border-[#EEDAC5]/30 py-3 md:py-4 px-5 text-[#333333] font-black text-sm md:text-base"
               >
-                مشخصات فنی و ویژگی‌ها
+                ویژگی‌های تخصصی
               </td>
             </tr>
 
-            <!-- ردیف‌های مشخصات فنی (تولید پویا) -->
+            <!-- مشخصات پویا -->
             <tr
               v-for="(specKey, index) in allSpecificationKeys"
               :key="specKey"
-              class="hover:bg-gray-50/80 dark:hover:bg-gray-800/50 transition-colors group"
+              class="hover:bg-[#FDFBF9] transition-colors group"
             >
               <td
-                class="sticky-right p-5 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 font-bold border-l border-gray-200 dark:border-gray-700 text-sm shadow-[2px_0_5px_rgba(0,0,0,0.02)]"
+                class="sticky-right p-4 md:p-5 bg-white text-[#333333] font-bold border-l border-[#EEDAC5]/30 text-xs md:text-sm shadow-[4px_0_12px_rgba(0,0,0,0.02)] z-20"
               >
                 {{ specKey }}
               </td>
               <td
                 v-for="product in items"
                 :key="`spec-${product.id}-${index}`"
-                class="p-5 border-l border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-300 text-sm leading-relaxed"
+                class="p-4 md:p-5 border-l border-[#EEDAC5]/30 text-[#333333] text-sm leading-relaxed"
               >
                 <div v-if="getSpecValue(product, specKey)" class="flex items-start gap-2">
-                  <svg
-                    class="w-4 h-4 text-green-500 mt-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M5 13l4 4L19 7"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                    />
-                  </svg>
+                  <span
+                    class="w-1.5 h-1.5 rounded-full bg-[#F57A9B] mt-1.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                  ></span>
                   <span>{{ getSpecValue(product, specKey) }}</span>
                 </div>
-                <div v-else class="text-gray-300 dark:text-gray-600 text-lg pr-6">-</div>
+                <div v-else class="text-[#DFA9C7] text-lg pr-4">-</div>
               </td>
             </tr>
           </tbody>
@@ -507,54 +413,37 @@ const getSpecValue = (product: any, key: string) => {
 </script>
 
 <style scoped>
-/* استایل‌های حرفه‌ای جدول و اسکرول‌بار */
+/* اسکرول‌بار اختصاصی هماهنگ با برند بیوتیلی */
 .custom-scrollbar::-webkit-scrollbar {
-  height: 10px;
+  height: 8px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #f8fafc; /* gray-50 */
-  border-radius: 10px;
-  margin: 0 10px;
+  background: #f5f5f7;
+  border-radius: 8px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbd5e1; /* gray-300 */
-  border-radius: 10px;
-  border: 2px solid #f8fafc;
+  background: #eedac5;
+  border-radius: 8px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8; /* gray-400 */
+  background: #dfa9c7;
 }
 
-/* برای حالت دارک مود اسکرول بار */
-@media (prefers-color-scheme: dark) {
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: #111827; /* gray-900 */
-    border-top: 1px solid #1f2937;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #374151; /* gray-700 */
-    border: 2px solid #111827;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #4b5563; /* gray-600 */
-  }
-}
-
-/* کلاس‌های مربوط به چسبان بودن در اسکرول */
+/* مدیریت Z-Index و ستون‌های چسبان در موبایل و دسکتاپ */
 .sticky-top {
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: 10;
 }
 .sticky-right {
   position: sticky;
   right: 0;
-  z-index: 10;
+  z-index: 20;
 }
 .sticky-top-right {
   position: sticky;
   top: 0;
   right: 0;
-  z-index: 30; /* در اولویت بالاتر برای گوشه بالا سمت راست */
+  z-index: 30; /* اولویت بالا برای تلاقی سطر و ستون ثابت */
 }
 </style>

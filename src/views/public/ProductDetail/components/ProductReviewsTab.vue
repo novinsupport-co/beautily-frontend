@@ -543,7 +543,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import axiosInstance from '@/lib/axios'
+import axiosInstance from '@/lib/axios.js'
 
 const props = defineProps({
   productId: {

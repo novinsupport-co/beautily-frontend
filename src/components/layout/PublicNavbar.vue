@@ -186,8 +186,8 @@
           </template>
           <template v-else>
             <RouterLink
+              :to="auth.isAdmin ? '/admin/dashboard' : '/user/dashboard'"
               class="p-2.5 bg-[#F4ECE6]/60 border border-[#E9DDD2] rounded-xl text-slate-600 hover:bg-white transition-all"
-              to="/user/dashboard"
             >
               <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path
@@ -328,7 +328,8 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useCategoriesStore } from '@/stores/categories'
 import { useCartStore } from '@/stores/cart'
-import { useCompareStore } from '@/stores/compareStore' // اضافه شدن استور مقایسه
+import { useCompareStore } from '@/stores/compareStore'
+import { useSiteSettingsStore } from '@/stores/siteSettings'
 import Logo from '@/components/Logo/BeautyLogo.vue'
 import CartDropdown from '@/components/cart/CartDropdown.vue'
 import MobileMenu from './PublicMobileMenu.vue'
@@ -353,7 +354,8 @@ interface Product {
 const auth = useAuthStore()
 const categoryStore = useCategoriesStore()
 const cartStore = useCartStore()
-const compareStore = useCompareStore() // مقداردهی استور مقایسه
+const compareStore = useCompareStore()
+const settingsStore = useSiteSettingsStore()
 const router = useRouter()
 
 // --- Refs ---
@@ -372,6 +374,36 @@ const currentSubCategories = computed(
 )
 const popularCategories = computed(() => categories.value.slice(0, 5))
 
+// لینک‌های هدر (داینامیک و اصلاح‌شده)
+const navLinks = computed(() => {
+  let rawLinks = settingsStore.settings?.header_nav_links
+
+  // اگر به صورت رشته است (برای اطمینان) آن را به آرایه تبدیل می‌کنیم
+  if (typeof rawLinks === 'string') {
+    try {
+      rawLinks = JSON.parse(rawLinks)
+    } catch (e) {
+      rawLinks = []
+    }
+  }
+
+  // اگر آرایه معتبر است، کلیدهای name و path را استخراج می‌کنیم
+  if (Array.isArray(rawLinks) && rawLinks.length > 0) {
+    return rawLinks.map((link: any) => ({
+      text: link.name, // به جای title از name استفاده می‌کنیم
+      to: link.path, // به جای url از path استفاده می‌کنیم
+    }))
+  }
+
+  // مقادیر پیش‌فرض در صورتی که دیتابیس خالی باشد
+  return [
+    { text: 'جدیدترین محصولات', to: '/products' },
+    { text: 'تخفیف‌های طلایی', to: '/products?discount=true' },
+    { text: 'مجله بیوتیلی', to: '/magazine' },
+    { text: 'ارتباط با ما', to: '/about' },
+  ]
+})
+
 // --- Methods ---
 const formatPrice = (p: number) => p?.toLocaleString('fa-IR')
 
@@ -388,7 +420,7 @@ const handleBlur = () => {
   }, 250)
 }
 
-// --- Watcher (The Brain of Search) ---
+// --- Watcher ---
 watch(searchQuery, (newVal) => {
   clearTimeout(debounceTimeout)
 
@@ -408,7 +440,6 @@ watch(searchQuery, (newVal) => {
           params: { q: term },
           signal: abortController.signal,
         })
-        // اصلاح کلیدی: دسترسی مستقیم به آرایه محصولات مطابق JSON شما
         searchResults.value = response.data.data || []
       } catch (error: any) {
         if (error.name === 'CanceledError') return
@@ -423,13 +454,6 @@ watch(searchQuery, (newVal) => {
     isSearching.value = false
   }
 })
-
-const navLinks = [
-  { text: 'جدیدترین محصولات', to: '/products' },
-  { text: 'تخفیف‌های طلایی', to: '/products?discount=true' },
-  { text: 'مجله بیوتیلی', to: '/magazine' },
-  { text: 'ارتباط با ما', to: '/about' },
-]
 
 onMounted(async () => {
   if (categories.value.length === 0 && (categoryStore as any).fetchCategories) {

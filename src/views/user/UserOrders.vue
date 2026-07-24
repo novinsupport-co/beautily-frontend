@@ -1,22 +1,22 @@
 <template>
   <div class="space-y-6 font-vazir">
     <div>
-      <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">تاریخچه سفارشات</h1>
-      <p class="text-sm text-gray-500 dark:text-gray-400">
+      <h1 class="text-2xl font-bold text-[#333333] dark:text-white mb-2">تاریخچه سفارشات</h1>
+      <p class="text-sm text-[#777777] dark:text-gray-400">
         سفارش‌های ثبت شده، لغو شده و مرجوعی خود را اینجا پیگیری کنید.
       </p>
     </div>
 
     <!-- تب‌های وضعیت سفارش -->
-    <div class="border-b border-gray-200 dark:border-slate-700">
+    <div class="border-b border-[#E9DDD2] dark:border-slate-700">
       <nav aria-label="Tabs" class="flex gap-6 overflow-x-auto pb-[-1px] scrollbar-hide">
         <button
           v-for="tab in tabs"
           :key="tab.value"
           :class="[
             activeTab === tab.value
-              ? 'border-blue-600 text-blue-600 dark:border-blue-500 dark:text-blue-400'
-              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300',
+              ? 'border-[#F57A9B] text-[#F57A9B] dark:border-[#DFA9C7] dark:text-[#DFA9C7]'
+              : 'border-transparent text-[#777777] hover:text-[#333333] hover:border-[#E9DDD2] dark:text-gray-400 dark:hover:text-gray-300',
             'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors relative',
           ]"
           @click="activeTab = tab.value"
@@ -26,8 +26,8 @@
             v-if="getOrderCount(tab.value) > 0"
             :class="[
               activeTab === tab.value
-                ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400'
-                : 'bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-gray-300',
+                ? 'bg-[#F57A9B]/10 text-[#F57A9B] dark:bg-[#DFA9C7]/20 dark:text-[#DFA9C7]'
+                : 'bg-[#F5F5F7] text-[#777777] dark:bg-slate-700 dark:text-gray-300',
               'ml-2 py-0.5 px-2.5 rounded-full text-xs',
             ]"
           >
@@ -39,7 +39,7 @@
 
     <!-- حالت لودینگ -->
     <div v-if="isLoading" class="py-12 flex justify-center">
-      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#F57A9B]"></div>
     </div>
 
     <!-- لیست سفارشات -->
@@ -48,10 +48,10 @@
         <div
           v-for="order in filteredOrders"
           :key="order.id"
-          class="bg-white dark:bg-slate-800 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+          class="bg-[#FDFBF9] dark:bg-slate-800 rounded-2xl border border-[#E9DDD2] dark:border-slate-700 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
         >
           <div
-            class="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50"
+            class="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E9DDD2]/50 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50"
           >
             <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
               <div class="flex items-center gap-2">
@@ -63,21 +63,21 @@
                   {{ getStatusText(order.status || order.order_status) }}
                 </span>
               </div>
-              <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                <span class="font-medium text-gray-800 dark:text-gray-200">{{
+              <div class="flex items-center gap-2 text-sm text-[#777777] dark:text-gray-400">
+                <span class="font-medium text-[#333333] dark:text-gray-200">{{
                   formatDate(order.created_at)
                 }}</span>
-                <span class="text-gray-300 dark:text-slate-600">|</span>
+                <span class="text-[#E9DDD2] dark:text-slate-600">|</span>
                 <span
                   >کد پیگیری:
-                  <span class="font-medium text-gray-800 dark:text-gray-200">{{
+                  <span class="font-medium text-[#333333] dark:text-gray-200">{{
                     order.tracking_code || order.id
                   }}</span></span
                 >
-                <span class="text-gray-300 dark:text-slate-600 hidden sm:inline">|</span>
+                <span class="text-[#E9DDD2] dark:text-slate-600 hidden sm:inline">|</span>
                 <span class="hidden sm:inline"
                   >مبلغ:
-                  <span class="font-bold text-gray-800 dark:text-gray-200"
+                  <span class="font-bold text-[#333333] dark:text-gray-200"
                     >{{ Number(order.total_price).toLocaleString('fa-IR') }} تومان</span
                   ></span
                 >
@@ -88,7 +88,7 @@
             <div class="flex gap-2">
               <button
                 v-if="order.payment_status === 'pending'"
-                class="flex items-center justify-center gap-1 text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-xl transition-colors shadow-sm shadow-orange-500/30"
+                class="flex items-center justify-center gap-1 text-sm font-medium text-white bg-[#F57A9B] hover:bg-[#DFA9C7] px-4 py-2 rounded-xl transition-colors shadow-sm shadow-[#F57A9B]/30"
                 @click="$router.push(`/user/orders/${order.id}/payment`)"
               >
                 تکمیل پرداخت
@@ -96,7 +96,7 @@
 
               <span
                 v-else-if="order.payment_status === 'pending_verification'"
-                class="flex items-center justify-center gap-1 text-sm font-medium text-amber-600 bg-amber-50 dark:bg-amber-900/30 px-4 py-2 rounded-xl border border-amber-200 dark:border-amber-800"
+                class="flex items-center justify-center gap-1 text-sm font-medium text-[#BC846C] bg-[#EEDAC5]/30 dark:bg-amber-900/30 px-4 py-2 rounded-xl border border-[#EEDAC5] dark:border-amber-800"
               >
                 در حال بررسی فیش
               </span>
@@ -117,14 +117,14 @@
 
               <span
                 v-else-if="['canceled', 'cancelled', 'expired'].includes(order.payment_status)"
-                class="flex items-center justify-center gap-1 text-sm font-medium text-gray-500 bg-gray-100 dark:text-gray-400 dark:bg-gray-800 px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700"
+                class="flex items-center justify-center gap-1 text-sm font-medium text-[#777777] bg-[#F5F5F7] dark:text-gray-400 dark:bg-gray-800 px-4 py-2 rounded-xl border border-[#E9DDD2] dark:border-gray-700"
               >
                 لغو شده
               </span>
 
               <!-- دکمه جزئیات -->
               <button
-                class="flex items-center justify-center gap-1 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 px-4 py-2 rounded-xl transition-colors"
+                class="flex items-center justify-center gap-1 text-sm font-medium text-[#BC846C] dark:text-[#EEDAC5] hover:text-[#333333] bg-[#EEDAC5]/40 hover:bg-[#EEDAC5]/70 dark:bg-[#EEDAC5]/10 dark:hover:bg-[#EEDAC5]/20 px-4 py-2 rounded-xl transition-colors"
                 @click="$router.push(`/user/orders/${order.id}`)"
               >
                 جزئیات
@@ -136,9 +136,9 @@
 
       <div
         v-else
-        class="py-16 flex flex-col items-center justify-center text-center bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-gray-200 dark:border-slate-700"
+        class="py-16 flex flex-col items-center justify-center text-center bg-[#FDFBF9] dark:bg-slate-800 rounded-2xl border border-dashed border-[#E9DDD2] dark:border-slate-700"
       >
-        <p class="text-gray-500 dark:text-gray-400 max-w-md mx-auto">
+        <p class="text-[#777777] dark:text-gray-400 max-w-md mx-auto">
           سفارشی در این وضعیت یافت نشد.
         </p>
       </div>
@@ -147,8 +147,8 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, onMounted, ref} from 'vue'
-import {getOrdersApi} from '@/api/ordersApi'
+import { computed, onMounted, ref } from 'vue'
+import { getOrdersApi } from '@/api/ordersApi'
 
 const isLoading = ref(true)
 const orders = ref<any[]>([])
@@ -161,7 +161,6 @@ const tabs = [
   { name: 'مرجوعی', value: 'returned' },
 ]
 
-// افزودن pending به مقادیر مجاز برای جلوگیری از باگ
 const mapStatusToTab = (status: string) => {
   if (!status) return 'current'
   if (['pending', 'pending_payment', 'pending_review', 'processing', 'shipped'].includes(status))
@@ -173,7 +172,6 @@ const mapStatusToTab = (status: string) => {
   return 'current'
 }
 
-// اولویت با status است
 const filteredOrders = computed(() => {
   return orders.value.filter(
     (order) => mapStatusToTab(order.status || order.order_status) === activeTab.value,
@@ -186,7 +184,6 @@ const getOrderCount = (tabValue: string) => {
   ).length
 }
 
-// اضافه شدن مقادیر جدید برای پوشش کامل دیتای API
 const getStatusText = (status: string) => {
   const map: Record<string, string> = {
     pending: 'ثبت اولیه / در انتظار',
@@ -205,18 +202,18 @@ const getStatusText = (status: string) => {
 
 const getStatusColor = (status: string) => {
   const colors: Record<string, { text: string }> = {
-    pending: { text: 'text-orange-600 dark:text-orange-400' },
-    pending_payment: { text: 'text-orange-600 dark:text-orange-400' },
-    pending_review: { text: 'text-blue-600 dark:text-blue-400' },
+    pending: { text: 'text-[#BC846C] dark:text-orange-400' },
+    pending_payment: { text: 'text-[#BC846C] dark:text-orange-400' },
+    pending_review: { text: 'text-[#F57A9B] dark:text-[#DFA9C7]' },
     processing: { text: 'text-indigo-600 dark:text-indigo-400' },
     shipped: { text: 'text-teal-600 dark:text-teal-400' },
     delivered: { text: 'text-emerald-600 dark:text-emerald-400' },
-    cancelled: { text: 'text-gray-500 dark:text-gray-400' },
-    canceled: { text: 'text-gray-500 dark:text-gray-400' },
+    cancelled: { text: 'text-[#777777] dark:text-gray-400' },
+    canceled: { text: 'text-[#777777] dark:text-gray-400' },
     returned: { text: 'text-yellow-600 dark:text-yellow-400' },
     failed: { text: 'text-red-500 dark:text-red-400' },
   }
-  return colors[status] || { text: 'text-gray-600' }
+  return colors[status] || { text: 'text-[#777777]' }
 }
 
 const formatDate = (date: string) => new Date(date).toLocaleDateString('fa-IR')

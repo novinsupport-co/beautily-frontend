@@ -4,7 +4,7 @@
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <button
-          class="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors"
+          class="p-2 rounded-xl bg-[#EEDAC5]/40 hover:bg-[#EEDAC5]/70 dark:bg-gray-800 dark:hover:bg-gray-700 text-[#BC846C] dark:text-[#EEDAC5] transition-colors"
           @click="$router.push('/user/orders')"
         >
           <svg
@@ -20,14 +20,14 @@
             />
           </svg>
         </button>
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-white">جزئیات سفارش</h1>
+        <h1 class="text-2xl font-bold text-[#333333] dark:text-white">جزئیات سفارش</h1>
       </div>
     </div>
 
     <!-- حالت لودینگ -->
     <div v-if="isLoading" class="animate-pulse space-y-4">
-      <div class="h-32 bg-gray-200 dark:bg-gray-800 rounded-2xl w-full"></div>
-      <div class="h-64 bg-gray-200 dark:bg-gray-800 rounded-2xl w-full"></div>
+      <div class="h-32 bg-[#F5F5F7] dark:bg-gray-800 rounded-2xl w-full"></div>
+      <div class="h-64 bg-[#F5F5F7] dark:bg-gray-800 rounded-2xl w-full"></div>
     </div>
 
     <!-- ارور در دریافت اطلاعات -->
@@ -50,23 +50,23 @@
       <div class="lg:col-span-2 space-y-6">
         <!-- کارت مشخصات کلی سفارش -->
         <div
-          class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700"
+          class="bg-[#FDFBF9] dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-[#E9DDD2] dark:border-gray-700"
         >
           <div
-            class="flex flex-wrap items-center justify-between gap-4 border-b border-gray-100 dark:border-gray-700 pb-4 mb-4"
+            class="flex flex-wrap items-center justify-between gap-4 border-b border-[#E9DDD2] dark:border-gray-700 pb-4 mb-4"
           >
             <div>
-              <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">کد سفارش</p>
-              <p class="font-bold text-lg text-gray-800 dark:text-white">#{{ order.id }}</p>
+              <p class="text-sm text-[#777777] dark:text-gray-400 mb-1">کد سفارش</p>
+              <p class="font-bold text-lg text-[#333333] dark:text-white">#{{ order.id }}</p>
             </div>
             <div>
-              <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">تاریخ ثبت</p>
-              <p class="font-medium text-gray-800 dark:text-white dir-ltr text-right">
+              <p class="text-sm text-[#777777] dark:text-gray-400 mb-1">تاریخ ثبت</p>
+              <p class="font-medium text-[#333333] dark:text-white dir-ltr text-right">
                 {{ formatDate(order.created_at) }}
               </p>
             </div>
             <div>
-              <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">وضعیت</p>
+              <p class="text-sm text-[#777777] dark:text-gray-400 mb-1">وضعیت</p>
               <span
                 :class="getStatusBadge(order.payment_status).class"
                 class="px-3 py-1 rounded-full text-sm font-medium inline-block"
@@ -79,28 +79,33 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- جایگزین بخش آدرس ارسال در Template -->
             <div>
-              <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">آدرس ارسال</p>
+              <p class="text-sm text-[#777777] dark:text-gray-400 mb-2">آدرس ارسال</p>
 
               <!-- تگ p به div تغییر یافت -->
-              <div v-if="order.shipping_address || order.shipping_address_snapshot">
+              <div
+                v-if="order.shipping_address || order.shipping_address_snapshot"
+                class="text-[#333333] dark:text-gray-200"
+              >
                 <span v-if="getAddress(order).province">{{ getAddress(order).province }}، </span>
                 <span v-if="getAddress(order).city">{{ getAddress(order).city }}، </span>
                 <span>{{ getAddress(order).address || getAddress(order).full_address }}</span>
-                <div class="mt-1 text-gray-500">کد پستی: {{ getAddress(order).postal_code }}</div>
+                <div class="mt-1 text-[#777777] dark:text-gray-400">
+                  کد پستی: {{ getAddress(order).postal_code }}
+                </div>
               </div>
 
-              <p v-else>آدرس ثبت نشده است</p>
+              <p v-else class="text-[#333333] dark:text-gray-200">آدرس ثبت نشده است</p>
 
               <!-- تگ p به div تغییر یافت -->
-              <div class="text-sm text-gray-500 mt-2">
+              <div class="text-sm text-[#777777] dark:text-gray-400 mt-2">
                 <div>گیرنده: {{ order.receiver_name || order.user?.name || '-' }}</div>
                 <div>تماس: {{ order.receiver_phone || order.user?.mobile || '-' }}</div>
               </div>
             </div>
 
             <div>
-              <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">روش پرداخت</p>
-              <p class="text-sm text-gray-800 dark:text-gray-200 font-medium">
+              <p class="text-sm text-[#777777] dark:text-gray-400 mb-2">روش پرداخت</p>
+              <p class="text-sm text-[#333333] dark:text-gray-200 font-medium">
                 {{ getPaymentMethodLabel(order.payment_method) }}
               </p>
             </div>
@@ -109,9 +114,9 @@
 
         <!-- کارت لیست محصولات -->
         <div
-          class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700"
+          class="bg-[#FDFBF9] dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-[#E9DDD2] dark:border-gray-700"
         >
-          <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-4">
+          <h2 class="text-lg font-bold text-[#333333] dark:text-white mb-4">
             اقلام سفارش ({{ order.items?.length || 0 }} کالا)
           </h2>
 
@@ -119,12 +124,12 @@
             <div
               v-for="item in order.items"
               :key="item.id"
-              class="flex items-center gap-4 p-4 rounded-xl border border-gray-100 dark:border-gray-700/50 bg-gray-50/50 dark:bg-gray-900/20"
+              class="flex items-center gap-4 p-4 rounded-xl border border-[#E9DDD2] dark:border-gray-700/50 bg-[#F5F5F7] dark:bg-gray-900/20"
             >
               <!-- تصویر محصول -->
               <!-- تصویر محصول -->
               <div
-                class="w-16 h-16 shrink-0 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden flex items-center justify-center"
+                class="w-16 h-16 shrink-0 bg-white dark:bg-gray-800 rounded-lg border border-[#E9DDD2] dark:border-gray-700 overflow-hidden flex items-center justify-center"
               >
                 <!-- نمایش تصویر با اولویت thumbnail و سپس gallery بر اساس ساختار ProductResource -->
                 <img
@@ -136,17 +141,17 @@
                   :src="
                     item.product.images.thumbnail.urls?.medium || item.product.images.thumbnail.url
                   "
-                  class="w-16 h-16 shrink-0 object-cover rounded-lg border border-gray-200 dark:border-gray-700"
+                  class="w-16 h-16 shrink-0 object-cover rounded-lg border border-transparent"
                 />
                 <img
                   v-else-if="item.product?.images?.gallery?.[0]?.urls?.medium"
                   :alt="item.product?.title || item.name"
                   :src="item.product.images.gallery[0].urls.medium"
-                  class="w-16 h-16 shrink-0 object-cover rounded-lg border border-gray-200 dark:border-gray-700"
+                  class="w-16 h-16 shrink-0 object-cover rounded-lg border border-transparent"
                 />
                 <svg
                   v-else
-                  class="w-8 h-8 text-gray-300"
+                  class="w-8 h-8 text-[#DFA9C7]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -161,20 +166,20 @@
               </div>
 
               <div class="flex-1 min-w-0">
-                <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100 truncate">
+                <h3 class="text-sm font-bold text-[#333333] dark:text-gray-100 truncate">
                   {{ item.name || item.product?.title || 'محصول نامشخص' }}
                 </h3>
-                <div class="flex items-center gap-4 mt-2 text-sm text-gray-500 dark:text-gray-400">
+                <div class="flex items-center gap-4 mt-2 text-sm text-[#777777] dark:text-gray-400">
                   <span>تعداد: {{ item.quantity }}</span>
                   <span>فی: {{ formatPrice(item.price) }} تومان</span>
                 </div>
               </div>
 
               <div class="text-left shrink-0">
-                <p class="font-bold text-gray-800 dark:text-white">
+                <p class="font-bold text-[#333333] dark:text-white">
                   {{ formatPrice(item.price * item.quantity) }}
                 </p>
-                <p class="text-xs text-gray-400 mt-1">تومان</p>
+                <p class="text-xs text-[#777777] mt-1">تومان</p>
               </div>
             </div>
           </div>
@@ -185,35 +190,35 @@
       <div class="space-y-6">
         <!-- فاکتور -->
         <div
-          class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 sticky top-6"
+          class="bg-[#FDFBF9] dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-[#E9DDD2] dark:border-gray-700 sticky top-6"
         >
-          <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-4">جزئیات پرداخت</h2>
+          <h2 class="text-lg font-bold text-[#333333] dark:text-white mb-4">جزئیات پرداخت</h2>
 
           <div class="space-y-3 text-sm">
-            <div class="flex justify-between text-gray-600 dark:text-gray-400">
+            <div class="flex justify-between text-[#777777] dark:text-gray-400">
               <span>مبلغ کالاها</span>
               <span>{{ formatPrice(order.total_items_price) }} تومان</span>
             </div>
-            <div class="flex justify-between text-gray-600 dark:text-gray-400">
+            <div class="flex justify-between text-[#777777] dark:text-gray-400">
               <span>هزینه ارسال</span>
               <span>{{ formatPrice(order.shipping_cost || 0) }} تومان</span>
             </div>
-            <div class="flex justify-between text-gray-600 dark:text-gray-400">
+            <div class="flex justify-between text-[#777777] dark:text-gray-400">
               <span>مالیات</span>
               <span>{{ formatPrice(order.tax_amount || 0) }} تومان</span>
             </div>
-            <div v-if="order.total_discount > 0" class="flex justify-between text-red-500">
+            <div v-if="order.total_discount > 0" class="flex justify-between text-[#F57A9B]">
               <span>تخفیف</span>
               <span>- {{ formatPrice(order.total_discount) }} تومان</span>
             </div>
 
             <div
-              class="border-t border-gray-100 dark:border-gray-700 my-4 pt-4 flex justify-between items-center"
+              class="border-t border-[#E9DDD2] dark:border-gray-700 my-4 pt-4 flex justify-between items-center"
             >
-              <span class="font-bold text-gray-800 dark:text-white text-base">مبلغ نهایی</span>
-              <span class="font-bold text-xl text-blue-600 dark:text-blue-400">
+              <span class="font-bold text-[#333333] dark:text-white text-base">مبلغ نهایی</span>
+              <span class="font-bold text-xl text-[#F57A9B] dark:text-[#DFA9C7]">
                 {{ formatPrice(order.payable_amount || order.total_price) }}
-                <span class="text-sm font-normal text-gray-500">تومان</span>
+                <span class="text-sm font-normal text-[#777777]">تومان</span>
               </span>
             </div>
           </div>
@@ -222,7 +227,7 @@
           <!-- دکمه پرداخت (فقط برای حالت pending) -->
           <button
             v-if="order.payment_status === 'pending' || order.status === 'pending'"
-            class="w-full mt-6 py-3 px-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm shadow-orange-500/30"
+            class="w-full mt-6 py-3 px-4 bg-[#F57A9B] hover:bg-[#DFA9C7] text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm shadow-[#F57A9B]/30"
             @click="$router.push(`/user/orders/${order.id}/payment`)"
           >
             تکمیل پرداخت / آپلود فیش
@@ -302,11 +307,11 @@ const getStatusBadge = (status: string) => {
   const badges: Record<string, { label: string; class: string }> = {
     pending: {
       label: 'در انتظار پرداخت',
-      class: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
+      class: 'bg-[#EEDAC5]/40 text-[#BC846C] dark:bg-orange-900/30 dark:text-orange-400',
     },
     pending_verification: {
       label: 'در انتظار تایید فیش',
-      class: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+      class: 'bg-[#DFA9C7]/20 text-[#F57A9B] dark:bg-pink-900/30 dark:text-pink-400',
     },
     paid: {
       label: 'پرداخت شده',
@@ -322,10 +327,10 @@ const getStatusBadge = (status: string) => {
     },
     expired: {
       label: 'منقضی شده (لغو سیستمی)',
-      class: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
+      class: 'bg-[#F5F5F7] text-[#777777] dark:bg-gray-800 dark:text-gray-300',
     },
   }
-  return badges[status] || { label: 'نامشخص', class: 'bg-gray-100 text-gray-700' }
+  return badges[status] || { label: 'نامشخص', class: 'bg-[#F5F5F7] text-[#777777]' }
 }
 
 onMounted(() => {

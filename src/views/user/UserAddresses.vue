@@ -3,13 +3,13 @@
     <!-- هدر صفحه و دکمه افزودن -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">آدرس‌های من</h1>
-        <p class="text-sm text-gray-500 dark:text-gray-400">
+        <h1 class="text-2xl font-bold text-[#333333] dark:text-white mb-2">آدرس‌های من</h1>
+        <p class="text-sm text-[#777777] dark:text-gray-400">
           آدرس‌های گیرنده سفارش را مدیریت کنید.
         </p>
       </div>
       <button
-        class="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-colors shadow-lg shadow-blue-600/20 whitespace-nowrap"
+        class="flex items-center gap-2 px-5 py-2.5 bg-[#F57A9B] hover:bg-[#DFA9C7] text-white rounded-xl font-medium transition-colors shadow-lg shadow-[#F57A9B]/20 whitespace-nowrap"
         @click="openAddressModal()"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -26,7 +26,7 @@
 
     <!-- حالت لودینگ (اختیاری اما پیشنهادی) -->
     <div v-if="isLoading" class="flex justify-center py-10">
-      <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
+      <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-[#F57A9B]"></div>
     </div>
 
     <!-- لیست آدرس‌ها -->
@@ -36,15 +36,15 @@
         :key="address.id"
         :class="
           address.is_default
-            ? 'border-blue-500 shadow-md dark:border-blue-500'
-            : 'border-gray-200 dark:border-slate-700 hover:border-blue-300 shadow-sm'
+            ? 'border-[#F57A9B] shadow-md dark:border-[#F57A9B]'
+            : 'border-[#E9DDD2] dark:border-slate-700 hover:border-[#DFA9C7] shadow-sm'
         "
         class="bg-white dark:bg-slate-800 rounded-2xl border transition-all duration-200 p-5 relative overflow-hidden"
       >
         <!-- لیبل پیش‌فرض -->
         <div
           v-if="address.is_default"
-          class="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-bl-xl"
+          class="absolute top-0 right-0 bg-[#F57A9B] text-white text-xs font-bold px-3 py-1 rounded-bl-xl"
         >
           آدرس پیش‌فرض
         </div>
@@ -52,10 +52,10 @@
         <div class="space-y-4 mt-2">
           <!-- متن کامل آدرس -->
           <p
-            class="text-gray-800 dark:text-gray-200 font-medium leading-relaxed flex items-start gap-2"
+            class="text-[#333333] dark:text-gray-200 font-medium leading-relaxed flex items-start gap-2"
           >
             <svg
-              class="w-5 h-5 text-gray-400 mt-0.5 shrink-0"
+              class="w-5 h-5 text-[#EEDAC5] mt-0.5 shrink-0"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -78,7 +78,7 @@
 
           <!-- اطلاعات تکمیلی -->
           <div
-            class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-500 dark:text-gray-400 border-t border-gray-100 dark:border-slate-700 pt-3"
+            class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-[#777777] dark:text-gray-400 border-t border-[#E9DDD2] dark:border-slate-700 pt-3"
           >
             <div class="flex items-center gap-1">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -119,13 +119,13 @@
           <div class="flex items-center justify-end gap-3 pt-2">
             <button
               v-if="!address.is_default"
-              class="text-sm text-orange-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 font-medium ml-auto"
+              class="text-sm text-[#BC846C] hover:text-[#F57A9B] dark:text-gray-400 dark:hover:text-[#F57A9B] font-medium ml-auto"
               @click="setDefault(address.id)"
             >
               تنظیم به عنوان پیش‌فرض
             </button>
             <button
-              class="p-2 text-gray-500 hover:bg-gray-100 hover:text-blue-600 dark:text-gray-400 dark:hover:bg-slate-700 dark:hover:text-blue-400 rounded-lg transition-colors"
+              class="p-2 text-[#777777] hover:bg-[#EEDAC5]/30 hover:text-[#F57A9B] dark:text-gray-400 dark:hover:bg-slate-700 dark:hover:text-[#F57A9B] rounded-lg transition-colors"
               title="ویرایش"
               @click="openAddressModal(address)"
             >
@@ -139,7 +139,7 @@
               </svg>
             </button>
             <button
-              class="p-2 text-gray-500 hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-900/30 dark:hover:text-red-500 rounded-lg transition-colors"
+              class="p-2 text-[#777777] hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-900/30 dark:hover:text-red-500 rounded-lg transition-colors"
               title="حذف"
               @click="deleteAddress(address.id)"
             >
@@ -160,9 +160,9 @@
     <!-- حالت خالی -->
     <div
       v-else
-      class="py-16 flex flex-col items-center justify-center text-center bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-gray-200 dark:border-slate-700"
+      class="py-16 flex flex-col items-center justify-center text-center bg-[#FDFBF9] dark:bg-slate-800 rounded-2xl border border-dashed border-[#E9DDD2] dark:border-slate-700"
     >
-      <div class="w-20 h-20 mb-4 text-gray-300 dark:text-slate-600">
+      <div class="w-20 h-20 mb-4 text-[#EEDAC5] dark:text-slate-600">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
@@ -172,8 +172,8 @@
           ></path>
         </svg>
       </div>
-      <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">آدرسی ثبت نشده است!</h3>
-      <p class="text-gray-500 dark:text-gray-400">
+      <h3 class="text-lg font-bold text-[#333333] dark:text-white mb-2">آدرسی ثبت نشده است!</h3>
+      <p class="text-[#777777] dark:text-gray-400">
         شما هنوز هیچ آدرسی برای دریافت سفارشات ثبت نکرده‌اید.
       </p>
     </div>
@@ -185,16 +185,16 @@
         @click="closeModal"
       ></div>
       <div
-        class="relative w-full max-w-2xl bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 overflow-hidden flex flex-col max-h-[90vh]"
+        class="relative w-full max-w-2xl bg-[#FDFBF9] dark:bg-slate-800 rounded-2xl shadow-xl border border-[#E9DDD2] dark:border-slate-700 overflow-hidden flex flex-col max-h-[90vh]"
       >
         <div
-          class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50"
+          class="flex items-center justify-between px-6 py-4 border-b border-[#E9DDD2] dark:border-slate-700 bg-white/50 dark:bg-slate-800/50"
         >
-          <h3 class="text-lg font-bold text-gray-800 dark:text-white">
+          <h3 class="text-lg font-bold text-[#333333] dark:text-white">
             {{ form.id ? 'ویرایش آدرس' : 'ثبت آدرس جدید' }}
           </h3>
           <button
-            class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+            class="text-[#777777] hover:text-[#333333] dark:hover:text-gray-200"
             @click="closeModal"
           >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -211,57 +211,57 @@
         <div class="p-6 overflow-y-auto custom-scrollbar">
           <form class="grid grid-cols-1 md:grid-cols-2 gap-5" @submit.prevent="saveAddress">
             <div class="space-y-2">
-              <label class="text-sm text-gray-700 dark:text-gray-300">نام تحویل گیرنده</label>
+              <label class="text-sm text-[#333333] dark:text-gray-300">نام تحویل گیرنده</label>
               <input
                 v-model="form.receiver_name"
-                class="w-full px-4 py-2 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none"
+                class="w-full px-4 py-2 rounded-xl border border-[#E9DDD2] dark:border-slate-600 bg-white dark:bg-slate-900 text-[#333333] dark:text-gray-100 focus:ring-2 focus:ring-[#F57A9B] outline-none"
                 required
                 type="text"
               />
             </div>
             <div class="space-y-2">
-              <label class="text-sm text-gray-700 dark:text-gray-300">شماره تماس (موبایل)</label>
+              <label class="text-sm text-[#333333] dark:text-gray-300">شماره تماس (موبایل)</label>
               <input
                 v-model="form.phone"
-                class="w-full px-4 py-2 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none"
+                class="w-full px-4 py-2 rounded-xl border border-[#E9DDD2] dark:border-slate-600 bg-white dark:bg-slate-900 text-[#333333] dark:text-gray-100 focus:ring-2 focus:ring-[#F57A9B] outline-none"
                 dir="ltr"
                 required
                 type="tel"
               />
             </div>
             <div class="space-y-2">
-              <label class="text-sm text-gray-700 dark:text-gray-300">استان</label>
+              <label class="text-sm text-[#333333] dark:text-gray-300">استان</label>
               <input
                 v-model="form.province"
-                class="w-full px-4 py-2 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none"
+                class="w-full px-4 py-2 rounded-xl border border-[#E9DDD2] dark:border-slate-600 bg-white dark:bg-slate-900 text-[#333333] dark:text-gray-100 focus:ring-2 focus:ring-[#F57A9B] outline-none"
                 required
                 type="text"
               />
             </div>
             <div class="space-y-2">
-              <label class="text-sm text-gray-700 dark:text-gray-300">شهر</label>
+              <label class="text-sm text-[#333333] dark:text-gray-300">شهر</label>
               <input
                 v-model="form.city"
-                class="w-full px-4 py-2 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none"
+                class="w-full px-4 py-2 rounded-xl border border-[#E9DDD2] dark:border-slate-600 bg-white dark:bg-slate-900 text-[#333333] dark:text-gray-100 focus:ring-2 focus:ring-[#F57A9B] outline-none"
                 required
                 type="text"
               />
             </div>
             <div class="space-y-2 md:col-span-2">
-              <label class="text-sm text-gray-700 dark:text-gray-300">نشانی پستی دقیق</label>
+              <label class="text-sm text-[#333333] dark:text-gray-300">نشانی پستی دقیق</label>
               <textarea
                 v-model="form.full_address"
-                class="w-full px-4 py-2 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                class="w-full px-4 py-2 rounded-xl border border-[#E9DDD2] dark:border-slate-600 bg-white dark:bg-slate-900 text-[#333333] dark:text-gray-100 focus:ring-2 focus:ring-[#F57A9B] outline-none resize-none"
                 placeholder="خیابان، کوچه، پلاک، واحد..."
                 required
                 rows="3"
               ></textarea>
             </div>
             <div class="space-y-2">
-              <label class="text-sm text-gray-700 dark:text-gray-300">کد پستی (۱۰ رقمی)</label>
+              <label class="text-sm text-[#333333] dark:text-gray-300">کد پستی (۱۰ رقمی)</label>
               <input
                 v-model="form.postal_code"
-                class="w-full px-4 py-2 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none"
+                class="w-full px-4 py-2 rounded-xl border border-[#E9DDD2] dark:border-slate-600 bg-white dark:bg-slate-900 text-[#333333] dark:text-gray-100 focus:ring-2 focus:ring-[#F57A9B] outline-none"
                 dir="ltr"
                 type="text"
               />
@@ -270,18 +270,18 @@
         </div>
 
         <div
-          class="p-6 border-t border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50 flex items-center justify-end gap-3 mt-auto"
+          class="p-6 border-t border-[#E9DDD2] dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 flex items-center justify-end gap-3 mt-auto"
         >
           <button
             :disabled="isSaving"
-            class="px-5 py-2.5 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-xl font-medium transition-colors"
+            class="px-5 py-2.5 text-[#777777] dark:text-gray-300 hover:bg-[#EEDAC5]/30 dark:hover:bg-slate-700 rounded-xl font-medium transition-colors"
             @click="closeModal"
           >
             انصراف
           </button>
           <button
             :disabled="isSaving"
-            class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-colors shadow-lg shadow-blue-600/20 flex items-center gap-2"
+            class="px-6 py-2.5 bg-[#F57A9B] hover:bg-[#DFA9C7] text-white rounded-xl font-medium transition-colors shadow-lg shadow-[#F57A9B]/20 flex items-center gap-2"
             @click="saveAddress"
           >
             <svg

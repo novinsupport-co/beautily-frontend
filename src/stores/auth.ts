@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import axiosInstance from '@/lib/axios'
 import router from '@/router'
 import { AdminLoginPayload, registerApi, RegisterPayload, VerifyOtpPayload } from '@/api/authApi'
@@ -20,8 +20,8 @@ export const useAuthStore = defineStore('auth', () => {
   /* =====================
      Getters
   ===================== */
-  const isAuthenticated = () => !!user.value
-  const isAdmin = () => user.value?.role === 'admin' // بر اساس فیلد دیتابیس
+  const isAuthenticated = computed(() => !!user.value)
+  const isAdmin = computed(() => user.value?.role === 'admin')
 
   /* =====================
      تنظیم هدر توکن

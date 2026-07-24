@@ -1,9 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { createHead } from '@vueuse/head'
-import { defaultConfig, plugin as FormKit } from '@formkit/vue'
-import { fa } from '@formkit/i18n'
-import formkitConfig from './formkit.config'
 
 import App from './App.vue'
 import router from './router'
@@ -35,9 +32,9 @@ auth.autoRefreshSession()
 
 // ---------------------------
 app.use(router)
-app.use(createHead())
 
-const fk = typeof formkitConfig === 'function' ? formkitConfig() : formkitConfig
-app.use(FormKit, defaultConfig({ ...fk, locales: { fa }, locale: 'fa' }))
+// Head Management (VueUse Head)
+const head = createHead()
+app.use(head)
 
 app.mount('#app')

@@ -8,9 +8,10 @@ import UserLayout from '@/layouts/UserLayout.vue'
 import AdminLayout from '@/layouts/AdminLayout.vue'
 
 // Views - Public
-import Home from '@/views/public/Home.vue'
+import Home from '@/views/public/home/Home.vue'
 import Products from '@/views/public/Products.vue'
-import PublicProductDetail from '@/views/public/ProductDetail.vue'
+import PublicProductDetail from '@/views/public/ProductDetail/ProductDetail.vue'
+import Category from '@/views/public/CategoryProducts.vue'
 import CartPage from '@/components/cart/CartPage.vue'
 import NotFound from '@/views/public/NotFound.vue'
 import Compare from '@/views/public/CompareProducts.vue'
@@ -22,8 +23,6 @@ import ForgotPassword from '@/views/auth/ForgotPasswordView.vue'
 import ResetPassword from '@/views/auth/ForgotPasswordView.vue'
 // Views - User
 import UserDashboard from '@/views/user/Dashboard.vue'
-import UserProduct from '@/views/user/Product.vue'
-import UserHome from '@/views/user/Home.vue'
 import CheckoutPage from '@/views/user/CheckoutPage.vue'
 import UserOrders from '@/views/user/UserOrders.vue'
 import UserFavorites from '@/views/user/UserFavorites.vue'
@@ -41,7 +40,8 @@ import AdminLogs from '@/views/admin/Logs/LogDashboard.vue'
 import logState from '@/views/admin/Logs/LogsStatsView.vue'
 import ApiTest from '@/views/admin/Testes/ApiSandbox.vue'
 import AdminProductVariants from '@/views/admin/attributes/AttributeIndex.vue'
-
+import ExpertiseManager from '@/views/admin/categories/ExpertiseManager.vue'
+import AdminSiteSettings from '@/views/admin/settings/AdminSiteSettings.vue'
 // Views - Admin Reviews & Q&A
 import AdminReviews from '@/views/admin/reviews/AdminReviews.vue'
 import AdminQuestions from '@/views/admin/questions/AdminQuestions.vue'
@@ -56,6 +56,7 @@ import AdminCommunicationDashboard from '@/views/admin/Commonications/Communicat
 import NotificationManager from '@/views/admin/settings/NotificationManager.vue'
 // اضافه شدن ایمپورت صفحه تنظیمات فروشگاه
 import AdminShopSettings from '@/views/admin/settings/AdminShopSettings.vue'
+import AdminHomeSettings from '@/views/admin/home/HomeSettings.vue'
 
 const routes = [
   {
@@ -64,7 +65,7 @@ const routes = [
     children: [
       { path: '', name: 'public.home', component: Home },
       { path: 'products', name: 'public.products', component: Products },
-      { path: 'category/:slug', name: 'category', component: Products },
+      { path: 'category/:slug', name: 'category', component: Category },
       { path: 'tag/:slug', name: 'tag', component: Products },
       { path: 'product/:slug', name: 'public.product.detail', component: PublicProductDetail },
       { path: 'cart', name: 'public.cart', component: CartPage },
@@ -89,8 +90,6 @@ const routes = [
     meta: { requiresAuth: true, role: 'user' },
     children: [
       { path: 'dashboard', name: 'user.dashboard', component: UserDashboard },
-      { path: 'home', name: 'user.home', component: UserHome },
-      { path: 'product', name: 'user.product', component: UserProduct },
       { path: 'checkout', name: 'user.checkout', component: CheckoutPage },
       { path: 'orders', name: 'user.orders', component: UserOrders },
       { path: 'favorites', name: 'user.favorites', component: UserFavorites },
@@ -121,6 +120,11 @@ const routes = [
       { path: 'OrderManager', name: 'admin.OrderManager', component: AdminOrderManager },
       { path: 'LogMonitoring', name: 'admin.LogMonitoring', component: AdminLogMonitoring },
       {
+        path: 'adminSite-settings',
+        name: 'admin.adminSite-settings',
+        component: AdminSiteSettings,
+      },
+      {
         path: 'CommunicationDashboard',
         name: 'admin.CommunicationDashboard',
         component: AdminCommunicationDashboard,
@@ -136,6 +140,12 @@ const routes = [
         component: NotificationManager,
       },
       { path: 'system-images', name: 'admin.system-images', component: SystemImages },
+      { path: 'expertise-manager', name: 'admin.expertise-manager', component: ExpertiseManager },
+      {
+        path: 'admin-home-settings',
+        name: 'admin.admin-home-settings',
+        component: AdminHomeSettings,
+      },
     ],
   },
   { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound },
@@ -152,19 +162,16 @@ const router = createRouter({
 // =======================
 // 🔐 Global Auth Guard
 // =======================
-// =======================
-// 🔐 Global Auth Guard
-// =======================
 router.beforeEach(async (to: RouteLocationNormalized) => {
   const auth = useAuthStore()
 
   // 1. بررسی و بازیابی سشن اگر نیاز به لاگین دارد و کاربر احراز نشده
-  if (to.meta.requiresAuth && !auth.isAuthenticated()) {
+  if (to.meta.requiresAuth && !auth.isAuthenticated) {
     await auth.restoreSession()
   }
 
   // 2. جلوگیری از ورود افراد مهمان به صفحات محافظت شده
-  if (to.meta.requiresAuth && !auth.isAuthenticated()) {
+  if (to.meta.requiresAuth && !auth.isAuthenticated) {
     return '/auth/login'
   }
 
@@ -186,7 +193,7 @@ router.beforeEach(async (to: RouteLocationNormalized) => {
   }
 
   // 4. جلوگیری از ورود افراد لاگین کرده به صفحه لاگین/رجیستر
-  if (auth.isAuthenticated() && to.path.startsWith('/auth') && currentUser) {
+  if (auth.isAuthenticated && to.path.startsWith('/auth') && currentUser) {
     return currentUser.role === 'admin' ? '/admin/dashboard' : '/user/dashboard'
   }
 })

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <!-- دکمه همبرگری (باز کردن منو) -->
+    <!-- دکمه همبرگری -->
     <button
       aria-label="منوی کاربری"
-      class="p-2.5 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400 transition-all border border-gray-200/50 dark:border-slate-700 focus:outline-none"
+      class="p-2.5 rounded-xl bg-[#F5F5F7] dark:bg-slate-800 text-[#777777] dark:text-gray-300 hover:bg-[#EEDAC5]/30 dark:hover:bg-slate-700 hover:text-[#F57A9B] dark:hover:text-[#DFA9C7] transition-all border border-[#E9DDD2] dark:border-slate-700 focus:outline-none"
       @click="isOpen = true"
     >
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -16,9 +16,7 @@
       </svg>
     </button>
 
-    <!-- استفاده از Teleport برای انتقال منو به ریشه body جهت جلوگیری از مشکلات z-index -->
     <Teleport to="body">
-      <!-- پس‌زمینه تاریک (Backdrop) -->
       <transition name="fade">
         <div
           v-if="isOpen"
@@ -27,20 +25,19 @@
         ></div>
       </transition>
 
-      <!-- پنل کشویی منو -->
       <transition name="slide-right">
         <aside
           v-if="isOpen"
-          class="fixed top-0 right-0 h-full w-[280px] sm:w-[320px] bg-white dark:bg-slate-800 shadow-2xl z-[70] overflow-y-auto flex flex-col font-iransans"
+          class="fixed top-0 right-0 h-full w-[280px] sm:w-[320px] bg-[#FDFBF9] dark:bg-slate-800 shadow-2xl z-[70] overflow-y-auto flex flex-col font-iransans"
           dir="rtl"
         >
-          <!-- هدر منو (دکمه بستن) -->
+          <!-- هدر منو -->
           <div
-            class="flex items-center justify-between p-5 border-b border-gray-100 dark:border-slate-700/80"
+            class="flex items-center justify-between p-5 border-b border-[#E9DDD2] dark:border-slate-700/80"
           >
-            <span class="font-bold text-gray-800 dark:text-white">منوی کاربری</span>
+            <span class="font-bold text-[#333333] dark:text-white">منوی کاربری</span>
             <button
-              class="p-2 rounded-lg bg-gray-50 dark:bg-slate-700 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
+              class="p-2 rounded-lg bg-white dark:bg-slate-700 text-[#777777] hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors shadow-sm"
               @click="closeMenu"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,11 +53,11 @@
 
           <!-- اطلاعات کاربر -->
           <div
-            class="p-5 border-b border-gray-100 dark:border-slate-700/80 bg-slate-50/50 dark:bg-slate-800/50"
+            class="p-5 border-b border-[#E9DDD2] dark:border-slate-700/80 bg-[#F5F5F7]/50 dark:bg-slate-800/50"
           >
             <div class="flex items-center gap-4">
               <div
-                class="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/60 dark:to-blue-800/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-2xl overflow-hidden shrink-0 shadow-inner"
+                class="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-[#EEDAC5] to-[#E9DDD2] dark:from-slate-700 dark:to-slate-600 flex items-center justify-center text-[#BC846C] dark:text-[#DFA9C7] font-bold text-2xl overflow-hidden shrink-0 shadow-inner"
               >
                 <img
                   v-if="userAvatar"
@@ -74,11 +71,11 @@
                 ></div>
               </div>
               <div class="overflow-hidden flex-1">
-                <h2 class="font-bold text-gray-800 dark:text-white truncate text-base mb-0.5">
+                <h2 class="font-bold text-[#333333] dark:text-white truncate text-base mb-0.5">
                   {{ userName }}
                 </h2>
                 <div
-                  class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-xs font-medium text-gray-500 dark:text-gray-400"
+                  class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 border border-[#E9DDD2] dark:border-slate-600 text-xs font-medium text-[#777777] dark:text-gray-400"
                 >
                   کاربر عادی
                 </div>
@@ -93,8 +90,8 @@
               :key="item.title"
               :class="[
                 $route.name === item.routeName
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700/50 hover:text-blue-600 dark:hover:text-blue-400',
+                  ? 'bg-[#F57A9B] text-white shadow-md shadow-[#F57A9B]/20'
+                  : 'text-[#777777] dark:text-gray-300 hover:bg-[#F5F5F7] dark:hover:bg-slate-700/50 hover:text-[#F57A9B] dark:hover:text-[#DFA9C7]',
               ]"
               :to="{ name: item.routeName }"
               class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-sm font-medium transition-all"
@@ -103,7 +100,7 @@
               <svg
                 :class="{
                   'text-white': $route.name === item.routeName,
-                  'text-gray-400 dark:text-gray-500': $route.name !== item.routeName,
+                  'text-[#BC846C] dark:text-gray-500': $route.name !== item.routeName,
                 }"
                 class="w-5 h-5 shrink-0"
                 fill="none"
@@ -116,7 +113,7 @@
           </nav>
 
           <!-- دکمه خروج -->
-          <div class="p-4 border-t border-gray-100 dark:border-slate-700/80">
+          <div class="p-4 border-t border-[#E9DDD2] dark:border-slate-700/80">
             <button
               class="w-full flex items-center justify-center gap-3.5 px-4 py-3.5 rounded-xl text-sm font-medium text-red-500 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors"
               @click="logout"
@@ -139,27 +136,25 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, ref, watch} from 'vue'
-import {useAuthStore} from '@/stores/auth'
-import {useRoute, useRouter} from 'vue-router'
+// کد اسکریپت بدون تغییر در منطق باقی می‌ماند (مشابه ارسال شده توسط شما)
+import { computed, ref, watch } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import { useRoute, useRouter } from 'vue-router'
 
 const isOpen = ref(false)
 const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 
-// بستن منو در صورت تغییر صفحه
 watch(
   () => route.fullPath,
   () => {
     closeMenu()
   },
 )
-
 const closeMenu = () => {
   isOpen.value = false
 }
-
 const userName = computed(() => authStore.user?.name || 'کاربر مهمان')
 const userInitial = computed(() => userName.value.charAt(0))
 const userAvatar = computed(() => authStore.user?.avatar_url || authStore.user?.avatar?.url || null)
@@ -192,7 +187,6 @@ async function logout() {
 </script>
 
 <style scoped>
-/* انیمیشن محو شدن بک‌گراند تاریک */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;
@@ -201,8 +195,6 @@ async function logout() {
 .fade-leave-to {
   opacity: 0;
 }
-
-/* انیمیشن اسلاید از سمت راست */
 .slide-right-enter-active,
 .slide-right-leave-active {
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);

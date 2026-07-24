@@ -2,15 +2,15 @@
   <div class="space-y-6 font-vazir">
     <!-- هدر صفحه -->
     <div>
-      <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">اطلاعات حساب کاربری</h1>
-      <p class="text-sm text-gray-500 dark:text-gray-400">
+      <h1 class="text-2xl font-bold text-[#333333] dark:text-white mb-2">اطلاعات حساب کاربری</h1>
+      <p class="text-sm text-[#777777] dark:text-gray-400">
         اطلاعات شخصی و راه‌های ارتباطی خود را ویرایش کنید.
       </p>
     </div>
 
     <!-- وضعیت لودینگ اولیه -->
     <div v-if="isLoadingData" class="flex justify-center py-10">
-      <svg class="animate-spin h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24">
+      <svg class="animate-spin h-8 w-8 text-[#F57A9B]" fill="none" viewBox="0 0 24 24">
         <circle
           class="opacity-25"
           cx="12"
@@ -31,10 +31,10 @@
       <!-- هشدار عدم تکمیل اطلاعات -->
       <div
         v-if="!isProfileComplete"
-        class="bg-amber-50 dark:bg-amber-900/30 border-r-4 border-amber-500 p-4 rounded-xl flex items-start gap-3"
+        class="bg-[#EEDAC5]/30 dark:bg-amber-900/30 border-r-4 border-[#BC846C] p-4 rounded-xl flex items-start gap-3"
       >
         <svg
-          class="w-6 h-6 text-amber-500 flex-shrink-0 mt-0.5"
+          class="w-6 h-6 text-[#BC846C] flex-shrink-0 mt-0.5"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -47,10 +47,10 @@
           />
         </svg>
         <div>
-          <h3 class="text-amber-800 dark:text-amber-200 font-bold text-sm">
+          <h3 class="text-[#BC846C] dark:text-amber-200 font-bold text-sm">
             حساب کاربری شما تکمیل نشده است!
           </h3>
-          <p class="text-amber-700 dark:text-amber-300 text-sm mt-1">
+          <p class="text-[#777777] dark:text-amber-300 text-sm mt-1">
             برای استفاده از تمامی امکانات پنل، لطفا ایمیل و کد ملی خود را تایید و تکمیل کنید.
           </p>
         </div>
@@ -60,14 +60,14 @@
         <!-- ستون فرم اطلاعات (بزرگتر) -->
         <div class="xl:col-span-2 space-y-6">
           <div
-            class="bg-white dark:bg-slate-800 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm p-6"
+            class="bg-[#FDFBF9] dark:bg-slate-800 rounded-2xl border border-[#E9DDD2] dark:border-slate-700 shadow-sm p-6"
           >
             <div
-              class="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-6 border-b border-gray-100 dark:border-slate-700 gap-6"
+              class="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-6 border-b border-[#E9DDD2] dark:border-slate-700 gap-6"
             >
-              <h2 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2">
+              <h2 class="text-lg font-bold text-[#333333] dark:text-white flex items-center gap-2">
                 <svg
-                  class="w-5 h-5 text-blue-500"
+                  class="w-5 h-5 text-[#F57A9B]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -85,7 +85,7 @@
               <!-- بخش آپلود آواتار -->
               <div class="flex items-center gap-4">
                 <div
-                  class="relative w-16 h-16 rounded-full border-2 border-gray-200 dark:border-slate-600 overflow-hidden bg-gray-100 dark:bg-slate-700"
+                  class="relative w-16 h-16 rounded-full border-2 border-[#E9DDD2] dark:border-slate-600 overflow-hidden bg-[#F5F5F7] dark:bg-slate-700"
                 >
                   <img
                     v-if="avatarUrl"
@@ -95,7 +95,7 @@
                   />
                   <svg
                     v-else
-                    class="w-full h-full text-gray-400 p-2"
+                    class="w-full h-full text-[#E9DDD2] p-2"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -136,7 +136,7 @@
                   />
                   <div class="flex gap-2">
                     <button
-                      class="text-sm px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400 rounded-lg transition-colors"
+                      class="text-sm px-3 py-1.5 bg-[#EEDAC5]/40 hover:bg-[#EEDAC5]/70 text-[#BC846C] dark:bg-[#EEDAC5]/10 dark:text-[#EEDAC5] rounded-lg transition-colors"
                       type="button"
                       @click="fileInput?.click()"
                     >
@@ -151,7 +151,7 @@
                       حذف
                     </button>
                   </div>
-                  <span class="text-xs text-gray-400">حداکثر ۲ مگابایت (JPG, PNG)</span>
+                  <span class="text-xs text-[#777777]">حداکثر ۲ مگابایت (JPG, PNG)</span>
                 </div>
               </div>
             </div>
@@ -159,12 +159,12 @@
             <form class="grid grid-cols-1 md:grid-cols-2 gap-6" @submit.prevent="saveProfile">
               <!-- نام و نام خانوادگی -->
               <div class="space-y-2 md:col-span-2">
-                <label class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                <label class="text-sm font-medium text-[#777777] dark:text-gray-300"
                   >نام و نام خانوادگی</label
                 >
                 <input
                   v-model="form.name"
-                  class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  class="w-full px-4 py-2.5 rounded-xl border border-[#E9DDD2] dark:border-slate-600 bg-white dark:bg-slate-900 text-[#333333] dark:text-gray-100 focus:ring-2 focus:ring-[#F57A9B] focus:border-[#F57A9B] outline-none transition-all"
                   placeholder="نام و نام خانوادگی خود را وارد کنید"
                   required
                   type="text"
@@ -174,7 +174,7 @@
               <!-- موبایل -->
               <div class="space-y-2">
                 <div class="flex justify-between items-center">
-                  <label class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  <label class="text-sm font-medium text-[#777777] dark:text-gray-300"
                     >شماره موبایل</label
                   >
                   <span
@@ -187,7 +187,7 @@
                   <input
                     v-model="form.phone"
                     :disabled="isPhoneVerified"
-                    class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-left disabled:bg-gray-50 disabled:dark:bg-slate-800 disabled:text-gray-500 disabled:cursor-not-allowed"
+                    class="w-full px-4 py-2.5 rounded-xl border border-[#E9DDD2] dark:border-slate-600 bg-white dark:bg-slate-900 text-[#333333] dark:text-gray-100 focus:ring-2 focus:ring-[#F57A9B] focus:border-[#F57A9B] outline-none transition-all text-left disabled:bg-[#F5F5F7] disabled:dark:bg-slate-800 disabled:text-[#777777] disabled:cursor-not-allowed"
                     dir="ltr"
                     maxlength="11"
                     placeholder="09120000000"
@@ -196,7 +196,7 @@
                   <button
                     v-if="!isPhoneVerified"
                     :disabled="!form.phone || form.phone.length !== 11"
-                    class="px-4 py-2.5 bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-500/20 rounded-xl transition-colors whitespace-nowrap disabled:opacity-50 font-medium"
+                    class="px-4 py-2.5 bg-[#EEDAC5]/40 text-[#BC846C] hover:bg-[#EEDAC5]/70 dark:bg-[#EEDAC5]/10 dark:text-[#EEDAC5] dark:hover:bg-[#EEDAC5]/20 rounded-xl transition-colors whitespace-nowrap disabled:opacity-50 font-medium"
                     type="button"
                     @click="requestVerification('phone')"
                   >
@@ -208,7 +208,7 @@
               <!-- ایمیل -->
               <div class="space-y-2">
                 <div class="flex justify-between items-center">
-                  <label class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  <label class="text-sm font-medium text-[#777777] dark:text-gray-300"
                     >آدرس ایمیل</label
                   >
                   <span
@@ -221,7 +221,7 @@
                   <input
                     v-model="form.email"
                     :disabled="isEmailVerified"
-                    class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-left disabled:bg-gray-50 disabled:dark:bg-slate-800 disabled:text-gray-500 disabled:cursor-not-allowed"
+                    class="w-full px-4 py-2.5 rounded-xl border border-[#E9DDD2] dark:border-slate-600 bg-white dark:bg-slate-900 text-[#333333] dark:text-gray-100 focus:ring-2 focus:ring-[#F57A9B] focus:border-[#F57A9B] outline-none transition-all text-left disabled:bg-[#F5F5F7] disabled:dark:bg-slate-800 disabled:text-[#777777] disabled:cursor-not-allowed"
                     dir="ltr"
                     placeholder="example@domain.com"
                     type="email"
@@ -229,7 +229,7 @@
                   <button
                     v-if="!isEmailVerified"
                     :disabled="!form.email"
-                    class="px-4 py-2.5 bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-500/20 rounded-xl transition-colors whitespace-nowrap disabled:opacity-50 font-medium"
+                    class="px-4 py-2.5 bg-[#EEDAC5]/40 text-[#BC846C] hover:bg-[#EEDAC5]/70 dark:bg-[#EEDAC5]/10 dark:text-[#EEDAC5] dark:hover:bg-[#EEDAC5]/20 rounded-xl transition-colors whitespace-nowrap disabled:opacity-50 font-medium"
                     type="button"
                     @click="requestVerification('email')"
                   >
@@ -240,11 +240,11 @@
 
               <!-- کدملی -->
               <div class="space-y-2 md:col-span-2">
-                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">کد ملی</label>
+                <label class="text-sm font-medium text-[#777777] dark:text-gray-300">کد ملی</label>
                 <input
                   v-model="form.nationalCode"
                   :class="{ 'border-red-500 focus:ring-red-500': nationalCodeError }"
-                  class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-left"
+                  class="w-full px-4 py-2.5 rounded-xl border border-[#E9DDD2] dark:border-slate-600 bg-white dark:bg-slate-900 text-[#333333] dark:text-gray-100 focus:ring-2 focus:ring-[#F57A9B] focus:border-[#F57A9B] outline-none transition-all text-left"
                   dir="ltr"
                   maxlength="10"
                   placeholder="0000000000"
@@ -258,7 +258,7 @@
               <div class="md:col-span-2 pt-2">
                 <button
                   :disabled="isSaving"
-                  class="w-full sm:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-colors shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2 disabled:opacity-70"
+                  class="w-full sm:w-auto px-8 py-3 bg-[#F57A9B] hover:bg-[#DFA9C7] text-white rounded-xl font-medium transition-colors shadow-lg shadow-[#F57A9B]/20 flex items-center justify-center gap-2 disabled:opacity-70"
                   type="submit"
                 >
                   <svg
@@ -291,13 +291,13 @@
         <!-- ستون ساید (تغییر رمز عبور) -->
         <div class="space-y-6">
           <div
-            class="bg-white dark:bg-slate-800 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm p-6"
+            class="bg-[#FDFBF9] dark:bg-slate-800 rounded-2xl border border-[#E9DDD2] dark:border-slate-700 shadow-sm p-6"
           >
             <h2
-              class="text-lg font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-2"
+              class="text-lg font-bold text-[#333333] dark:text-white mb-6 flex items-center gap-2"
             >
               <svg
-                class="w-5 h-5 text-amber-500"
+                class="w-5 h-5 text-[#BC846C]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -313,36 +313,36 @@
             </h2>
             <form class="space-y-4" @submit.prevent="changePassword">
               <div class="space-y-2">
-                <label class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                <label class="text-sm font-medium text-[#777777] dark:text-gray-300"
                   >رمز عبور فعلی</label
                 >
                 <input
                   v-model="passForm.current_password"
-                  class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+                  class="w-full px-4 py-2.5 rounded-xl border border-[#E9DDD2] dark:border-slate-600 bg-white dark:bg-slate-900 text-[#333333] dark:text-gray-100 focus:ring-2 focus:ring-[#F57A9B] focus:border-[#F57A9B] outline-none transition-all"
                   dir="ltr"
                   required
                   type="password"
                 />
               </div>
               <div class="space-y-2">
-                <label class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                <label class="text-sm font-medium text-[#777777] dark:text-gray-300"
                   >رمز عبور جدید</label
                 >
                 <input
                   v-model="passForm.password"
-                  class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+                  class="w-full px-4 py-2.5 rounded-xl border border-[#E9DDD2] dark:border-slate-600 bg-white dark:bg-slate-900 text-[#333333] dark:text-gray-100 focus:ring-2 focus:ring-[#F57A9B] focus:border-[#F57A9B] outline-none transition-all"
                   dir="ltr"
                   required
                   type="password"
                 />
               </div>
               <div class="space-y-2">
-                <label class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                <label class="text-sm font-medium text-[#777777] dark:text-gray-300"
                   >تکرار رمز عبور جدید</label
                 >
                 <input
                   v-model="passForm.password_confirmation"
-                  class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+                  class="w-full px-4 py-2.5 rounded-xl border border-[#E9DDD2] dark:border-slate-600 bg-white dark:bg-slate-900 text-[#333333] dark:text-gray-100 focus:ring-2 focus:ring-[#F57A9B] focus:border-[#F57A9B] outline-none transition-all"
                   dir="ltr"
                   required
                   type="password"
@@ -350,12 +350,12 @@
               </div>
               <button
                 :disabled="isUpdatingPassword"
-                class="w-full mt-2 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-medium transition-colors disabled:opacity-70 flex items-center justify-center gap-2"
+                class="w-full mt-2 py-3 bg-[#EEDAC5] hover:bg-[#E9DDD2] text-[#BC846C] rounded-xl font-medium transition-colors disabled:opacity-70 flex items-center justify-center gap-2"
                 type="submit"
               >
                 <svg
                   v-if="isUpdatingPassword"
-                  class="animate-spin h-5 w-5 text-white"
+                  class="animate-spin h-5 w-5 text-[#BC846C]"
                   fill="none"
                   viewBox="0 0 24 24"
                 >
@@ -387,19 +387,19 @@
       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm"
     >
       <div
-        class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-sm shadow-xl border border-gray-100 dark:border-slate-700"
+        class="bg-[#FDFBF9] dark:bg-slate-800 rounded-2xl p-6 w-full max-w-sm shadow-xl border border-[#E9DDD2] dark:border-slate-700"
       >
-        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">
+        <h3 class="text-lg font-bold text-[#333333] dark:text-white mb-2">
           تایید {{ otpType === 'phone' ? 'شماره موبایل' : 'آدرس ایمیل' }}
         </h3>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+        <p class="text-sm text-[#777777] dark:text-gray-400 mb-6">
           لطفا کد ۶ رقمی ارسال شده را وارد نمایید.
         </p>
 
         <form @submit.prevent="verifyOtp">
           <input
             v-model="otpCode"
-            class="w-full px-4 py-3 text-center tracking-[0.5em] text-xl rounded-xl border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none mb-4"
+            class="w-full px-4 py-3 text-center tracking-[0.5em] text-xl rounded-xl border border-[#E9DDD2] dark:border-slate-600 bg-white dark:bg-slate-900 text-[#333333] dark:text-white focus:ring-2 focus:ring-[#F57A9B] focus:border-[#F57A9B] outline-none mb-4"
             dir="ltr"
             maxlength="6"
             placeholder="------"
@@ -409,10 +409,10 @@
 
           <!-- بخش تایمر و ارسال مجدد -->
           <div class="flex items-center justify-between mb-6 text-sm">
-            <span class="text-gray-500 dark:text-gray-400">کد را دریافت نکردید؟</span>
+            <span class="text-[#777777] dark:text-gray-400">کد را دریافت نکردید؟</span>
             <button
               v-if="timer === 0"
-              class="text-blue-600 dark:text-blue-400 hover:text-blue-700 font-bold transition-colors"
+              class="text-[#F57A9B] dark:text-[#DFA9C7] hover:text-[#DFA9C7] font-bold transition-colors"
               type="button"
               @click="resendCode"
             >
@@ -420,7 +420,7 @@
             </button>
             <span
               v-else
-              class="text-gray-700 dark:text-gray-300 font-medium tracking-widest"
+              class="text-[#333333] dark:text-gray-300 font-medium tracking-widest"
               dir="ltr"
             >
               {{ formattedTimer }}
@@ -429,7 +429,7 @@
 
           <div class="flex gap-3">
             <button
-              class="flex-1 py-2.5 px-4 bg-gray-100 hover:bg-gray-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-200 rounded-xl transition-colors font-medium"
+              class="flex-1 py-2.5 px-4 bg-[#F5F5F7] hover:bg-[#E9DDD2] dark:bg-slate-700 dark:hover:bg-slate-600 text-[#777777] dark:text-gray-200 rounded-xl transition-colors font-medium"
               type="button"
               @click="closeOtpModal"
             >
@@ -437,7 +437,7 @@
             </button>
             <button
               :disabled="isVerifyingOtp || otpCode.length !== 6"
-              class="flex-1 py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50"
+              class="flex-1 py-2.5 px-4 bg-[#F57A9B] hover:bg-[#DFA9C7] text-white rounded-xl transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50"
               type="submit"
             >
               <svg
@@ -483,7 +483,7 @@ import {
   verifyMobileOtpApi,
 } from '@/api/userApi'
 import { useNotificationStore } from '@/stores/notification'
-import { useConfirmStore } from '@/stores/confirm'
+import { useConfirmStore } from '@/stores/confirm' // --- مقداردهی استورها ---
 
 // --- مقداردهی استورها ---
 const notify = useNotificationStore()

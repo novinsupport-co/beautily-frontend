@@ -1,24 +1,21 @@
 <template>
   <aside
-    class="w-full bg-white dark:bg-slate-800 rounded-2xl shadow-[0_2px_20px_-4px_rgba(0,0,0,0.05)] dark:shadow-none border border-gray-100 dark:border-slate-700 p-5"
+    class="w-full bg-[#FDFBF9] dark:bg-slate-800 rounded-2xl shadow-[0_2px_20px_-4px_rgba(0,0,0,0.05)] dark:shadow-none border border-[#E9DDD2] dark:border-slate-700 p-5"
   >
     <!-- اطلاعات مختصر کاربر -->
     <div
-      class="flex items-center gap-4 pb-6 mb-4 border-b border-gray-100 dark:border-slate-700/80"
+      class="flex items-center gap-4 pb-6 mb-4 border-b border-[#E9DDD2] dark:border-slate-700/80"
     >
       <div
-        class="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/60 dark:to-blue-800/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-2xl overflow-hidden shrink-0 shadow-inner"
+        class="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-[#EEDAC5] to-[#E9DDD2] dark:from-slate-700 dark:to-slate-600 flex items-center justify-center text-[#BC846C] dark:text-[#DFA9C7] font-bold text-2xl overflow-hidden shrink-0 shadow-inner"
       >
-        <!-- اگر کاربر آواتار داشته باشد -->
         <img
           v-if="userAvatar"
           :alt="userName"
           :src="userAvatar"
           class="w-full h-full object-cover"
         />
-        <!-- اگر کاربر آواتار نداشته باشد -->
         <span v-else>{{ userInitial }}</span>
-        <!-- نقطه سبز وضعیت آنلاین -->
         <div
           class="absolute bottom-1 right-1 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-800 rounded-full"
         ></div>
@@ -27,12 +24,12 @@
       <div class="overflow-hidden flex-1">
         <h2
           :title="userName"
-          class="font-bold text-gray-800 dark:text-white truncate text-base mb-0.5"
+          class="font-bold text-[#333333] dark:text-white truncate text-base mb-0.5"
         >
           {{ userName }}
         </h2>
         <div
-          class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-gray-100 dark:bg-slate-700 text-xs font-medium text-gray-500 dark:text-gray-400"
+          class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#F5F5F7] dark:bg-slate-700 text-xs font-medium text-[#777777] dark:text-gray-400"
         >
           کاربر عادی
         </div>
@@ -46,8 +43,8 @@
         :key="item.title"
         :class="[
           $route.name === item.routeName
-            ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20 dark:shadow-blue-900/40'
-            : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700/50 hover:text-blue-600 dark:hover:text-blue-400',
+            ? 'bg-[#F57A9B] text-white shadow-md shadow-[#F57A9B]/20 dark:shadow-[#DFA9C7]/20'
+            : 'text-[#777777] dark:text-gray-300 hover:bg-[#F5F5F7] dark:hover:bg-slate-700/50 hover:text-[#F57A9B] dark:hover:text-[#DFA9C7]',
         ]"
         :to="{ name: item.routeName }"
         class="group flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 relative overflow-hidden"
@@ -56,7 +53,7 @@
         <svg
           :class="{
             'text-white': $route.name === item.routeName,
-            'text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-400':
+            'text-[#BC846C] dark:text-gray-500 group-hover:text-[#F57A9B] dark:group-hover:text-[#DFA9C7]':
               $route.name !== item.routeName,
           }"
           class="w-5 h-5 shrink-0 transition-transform duration-300 group-hover:scale-110"
@@ -69,7 +66,7 @@
       </router-link>
 
       <!-- خط جداکننده -->
-      <div class="h-px bg-gray-100 dark:bg-slate-700/80 my-4"></div>
+      <div class="h-px bg-[#E9DDD2] dark:bg-slate-700/80 my-4"></div>
 
       <!-- لینک خروج -->
       <button
@@ -96,6 +93,7 @@
 </template>
 
 <script lang="ts" setup>
+// کد اسکریپت بدون تغییر می‌ماند (مشابه ارسال شده توسط شما)
 import { computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
@@ -107,7 +105,6 @@ const userName = computed(() => authStore.user?.name || 'کاربر مهمان')
 const userInitial = computed(() => userName.value.charAt(0))
 const userAvatar = computed(() => authStore.user?.avatar_url || authStore.user?.avatar?.url || null)
 
-// آیکون‌ها
 const icons: Record<string, string> = {
   dashboard: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>`,
   orders: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>`,

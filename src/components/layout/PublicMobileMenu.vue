@@ -47,6 +47,7 @@
 
         <div class="flex-1 overflow-y-auto p-4 custom-scrollbar font-iransans">
           <ul class="space-y-3">
+            <!-- لینک خانه (ثابت) -->
             <li>
               <RouterLink
                 class="flex items-center gap-3 p-3 rounded-2xl hover:bg-[#F4ECE6] text-slate-700 font-bold text-sm transition-all"
@@ -70,6 +71,7 @@
               </RouterLink>
             </li>
 
+            <!-- دسته‌بندی‌ها (آکاردئون - ثابت) -->
             <li class="p-3 rounded-2xl bg-[#F4ECE6]/40 border border-[#E9DDD2]/50">
               <p
                 class="text-[10px] font-black text-[#BC846C] mb-3 px-1 uppercase tracking-widest opacity-70"
@@ -125,12 +127,14 @@
               </div>
             </li>
 
-            <li>
+            <!-- لینک‌های تنظیمات هدر (داینامیک) -->
+            <li v-for="link in navLinks" :key="link.to">
               <RouterLink
+                :to="link.to"
                 class="flex items-center gap-3 p-3 rounded-2xl hover:bg-[#F4ECE6] text-slate-700 font-bold text-sm transition-all"
-                to="/products"
                 @click="closeMenu"
               >
+                <!-- آیکون یکپارچه برای لینک‌های داینامیک -->
                 <svg
                   class="w-5 h-5 text-[#BC846C]"
                   fill="none"
@@ -138,12 +142,13 @@
                   viewBox="0 0 24 24"
                 >
                   <path
-                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
                     stroke-linecap="round"
+                    stroke-linejoin="round"
                     stroke-width="2"
                   />
                 </svg>
-                همه محصولات
+                {{ link.text }}
               </RouterLink>
             </li>
           </ul>
@@ -191,16 +196,38 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useCategoriesStore } from '@/stores/categories'
+import { useSiteSettingsStore } from '@/stores/siteSettings' // اضافه شدن استور تنظیمات
 
 const auth = useAuthStore()
 const categoryStore = useCategoriesStore()
+const settingsStore = useSiteSettingsStore() // راه‌اندازی استور
 const router = useRouter()
 const open = ref(false)
 const activeCat = ref<number | null>(null)
+
+// لینک‌های منو (داینامیک شده از تنظیمات عمومی)
+const navLinks = computed(() => {
+  if (
+    settingsStore.settings?.header_nav_links &&
+    settingsStore.settings.header_nav_links.length > 0
+  ) {
+    return settingsStore.settings.header_nav_links.map((link: any) => ({
+      text: link.title,
+      to: link.url,
+    }))
+  }
+  // مقادیر پیش‌فرض در صورت نبود دیتا در تنظیمات
+  return [
+    { text: 'همه محصولات', to: '/products' },
+    { text: 'تخفیف‌های طلایی', to: '/products?discount=true' },
+    { text: 'مجله بیوتیلی', to: '/magazine' },
+    { text: 'ارتباط با ما', to: '/about' },
+  ]
+})
 
 watch(open, (val) => {
   if (val) document.body.style.overflow = 'hidden'

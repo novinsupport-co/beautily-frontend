@@ -181,6 +181,7 @@
     </section>
 
     <div class="grid lg:grid-cols-3 gap-8">
+      <!-- تصویر اصلی -->
       <div class="space-y-4">
         <h4 class="font-iransans-bold">🖼️ تصویر اصلی</h4>
         <div
@@ -206,7 +207,17 @@
             @change="onThumbnailChange"
           />
         </div>
+
+        <!-- اینپوت Alt تصویر اصلی -->
+        <input
+          v-if="thumbnailPreview || form.images?.thumbnail"
+          v-model="form.thumbnail_alt"
+          class="input-fancy !py-2 text-sm mt-2"
+          placeholder="متن جایگزین (Alt) تصویر اصلی..."
+        />
       </div>
+
+      <!-- گالری -->
       <div class="lg:col-span-2 space-y-4">
         <h4 class="font-iransans-bold">📸 گالری</h4>
         <div class="grid grid-cols-4 gap-4">
@@ -216,16 +227,33 @@
             <input class="hidden" multiple type="file" @change="onGalleryChange" />
             <span class="text-2xl">+</span>
           </label>
+
+          <!-- تصاویر جدید گالری -->
           <div
             v-for="(file, index) in galleryPreviews"
-            :key="index"
-            class="relative aspect-square border-2 border-pink-400 rounded-[2rem] overflow-hidden"
+            :key="'new-' + index"
+            class="flex flex-col gap-2"
           >
-            <img :src="file.url" class="w-full h-full object-cover" />
-            <button class="absolute inset-0 bg-black/40 text-white" @click="removeNewImage(index)">
-              حذف
-            </button>
+            <div
+              class="relative aspect-square border-2 border-pink-400 rounded-[2rem] overflow-hidden"
+            >
+              <img :src="file.url" class="w-full h-full object-cover" />
+              <button
+                class="absolute inset-0 bg-black/40 text-white"
+                @click="removeNewImage(index)"
+              >
+                حذف
+              </button>
+            </div>
+            <!-- اینپوت Alt تصاویر گالری -->
+            <input
+              v-model="form.gallery_alts[index]"
+              class="input-fancy !py-1 px-2 text-xs"
+              placeholder="متن جایگزین..."
+            />
           </div>
+
+          <!-- تصاویر قبلی گالری (در صفحه ویرایش) -->
           <div
             v-for="(img, index) in form.images?.gallery"
             :key="img.id"
@@ -388,6 +416,11 @@ const onGalleryChange = (e: Event) => {
 const removeNewImage = (i: number) => {
   galleryPreviews.value.splice(i, 1)
   props.form.new_gallery_files.splice(i, 1)
+
+  // اضافه کردن این خط برای پاک شدن alt همزمان با تصویر
+  if (props.form.gallery_alts) {
+    props.form.gallery_alts.splice(i, 1)
+  }
 }
 const removeExistingImage = (i: number) => props.form.images.gallery.splice(i, 1)
 

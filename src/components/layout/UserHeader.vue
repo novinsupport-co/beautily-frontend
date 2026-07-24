@@ -1,6 +1,6 @@
 <template>
   <header
-    class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg sticky top-0 z-40 border-b border-gray-100 dark:border-slate-800 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] transition-colors duration-300"
+    class="bg-[#FDFBF9]/90 dark:bg-slate-900/90 backdrop-blur-lg sticky top-0 z-40 border-b border-[#E9DDD2] dark:border-slate-800 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] transition-colors duration-300"
   >
     <nav class="w-full px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center" dir="rtl">
       <!-- بخش راست: لوگو و منوی دسکتاپ -->
@@ -8,19 +8,19 @@
         <Logo class="shrink-0 scale-105" />
 
         <ul
-          class="hidden lg:flex items-center gap-8 text-gray-500 dark:text-gray-400 text-sm font-iransans-medium"
+          class="hidden lg:flex items-center gap-8 text-[#777777] dark:text-gray-400 text-sm font-iransans-medium"
         >
           <li>
             <RouterLink
-              class="flex items-center gap-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-              to="/user/home"
+              class="flex items-center gap-2 hover:text-[#F57A9B] dark:hover:text-[#DFA9C7] transition-colors"
+              to="/user/dashboard"
             >
               <HomeIcon class="w-4 h-4" /> پیشخوان
             </RouterLink>
           </li>
           <li>
             <RouterLink
-              class="flex items-center gap-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              class="flex items-center gap-2 hover:text-[#F57A9B] dark:hover:text-[#DFA9C7] transition-colors"
               to="/products"
             >
               <ShoppingBagIcon class="w-4 h-4" /> محصولات
@@ -28,7 +28,7 @@
           </li>
           <li>
             <RouterLink
-              class="flex items-center gap-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              class="flex items-center gap-2 hover:text-[#F57A9B] dark:hover:text-[#DFA9C7] transition-colors"
               to="/user/orders"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,7 +45,7 @@
           <li>
             <RouterLink
               class="flex items-center gap-2 hover:text-red-500 dark:hover:text-red-400 transition-colors"
-              to="/user/wishlist"
+              to="/user/favorites"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -64,7 +64,7 @@
       <!-- بخش چپ: آیکون‌ها و دکمه خروج -->
       <div class="hidden md:flex items-center gap-5">
         <router-link
-          class="relative p-2.5 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all rounded-xl hover:bg-blue-50 dark:hover:bg-slate-800"
+          class="relative p-2.5 text-[#777777] dark:text-gray-400 hover:text-[#F57A9B] dark:hover:text-[#DFA9C7] transition-all rounded-xl hover:bg-[#F5F5F7] dark:hover:bg-slate-800"
           title="مقایسه کالاها"
           to="/compare"
         >
@@ -78,7 +78,7 @@
           </svg>
           <span
             v-if="compareStore.items.length > 0"
-            class="absolute top-1.5 right-1.5 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-blue-600 rounded-full border-2 border-white dark:border-slate-900 shadow-sm"
+            class="absolute top-1.5 right-1.5 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-[#F57A9B] rounded-full border-2 border-white dark:border-slate-900 shadow-sm"
           >
             {{ compareStore.items.length }}
           </span>
@@ -86,10 +86,10 @@
 
         <CartDropdown />
 
-        <div class="h-8 w-px bg-gray-200 dark:bg-slate-700 mx-2"></div>
+        <div class="h-8 w-px bg-[#E9DDD2] dark:bg-slate-700 mx-2"></div>
 
         <button
-          class="flex items-center gap-2 text-sm font-iransans-medium text-gray-600 dark:text-gray-300 px-4 py-2 rounded-xl hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400 transition-all border border-transparent hover:border-red-100 dark:hover:border-red-900/50"
+          class="flex items-center gap-2 text-sm font-iransans-medium text-[#777777] dark:text-gray-300 px-4 py-2 rounded-xl hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400 transition-all border border-transparent hover:border-red-100 dark:hover:border-red-900/50"
           @click="logout"
         >
           <LogoutIcon class="w-4 h-4" /> خروج
@@ -99,8 +99,6 @@
       <!-- بخش موبایل (همبرگری و سبد خرید) -->
       <div class="md:hidden flex items-center gap-3">
         <CartDropdown />
-
-        <!-- کامپوننت منوی موبایل اضافه و فعال شد -->
         <MobileMenu />
       </div>
     </nav>
@@ -117,8 +115,6 @@ import CartDropdown from '@/components/cart/CartDropdown.vue'
 import ShoppingBagIcon from '@/components/icons/ShoppingBagIcon.vue'
 import HomeIcon from '@/components/icons/HomeIcon.vue'
 import LogoutIcon from '@/components/icons/LogoutIcon.vue'
-
-// ایمپورت شدن کامپوننت جدید منوی موبایل
 import MobileMenu from '@/components/layout/UserMobileMenu.vue'
 
 const router = useRouter()

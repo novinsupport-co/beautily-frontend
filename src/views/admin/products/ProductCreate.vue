@@ -54,6 +54,8 @@
                 :allCategories="categories"
                 :brands="brands"
                 :form="form"
+                :ingredients="ingredients"
+                :trustBadges="trustBadges"
                 @update-catalog="handleCatalogFileUpdate"
               />
             </KeepAlive>
@@ -94,7 +96,11 @@ import TabTechnicalSpecs from './tabs/TabTechnicalSpecs.vue'
 import TabVariants from './tabs/TabVariants.vue'
 import TabRelated from './tabs/TabRelated.vue'
 import LivePreview from './components/LivePreview.vue'
-
+import TabSeo from './tabs/TabSeo.vue'
+import TabExpertise from './tabs/TabExpertise.vue'
+// متغیرهای جدید برای دریافت از بک‌اند
+const ingredients = ref<any[]>([])
+const trustBadges = ref<any[]>([])
 const router = useRouter()
 const notify = useNotificationStore()
 
@@ -124,19 +130,32 @@ const form = reactive({
   variants: [] as any[],
   related_ids: [] as number[],
   related_products: [] as any[],
-  seo: { title: '', description: '' },
+  seo: {
+    title: '',
+    description: '',
+    canonical_url: '',
+    robots: 'index, follow',
+  },
   new_thumbnail: null as File | null,
   preview_url: '',
   new_gallery_files: [] as File[],
   images: { thumbnail: null, gallery: [] }, // برای جلوگیری از خطای رندر در صفحه Create
   catalog_url: '',
+  thumbnail_alt: '', // اضافه شود
+  gallery_alts: [] as string[], // اضافه شود
+  expert_review: '',
+  how_to_use: '',
+  ingredient_ids: [] as number[],
+  trust_badge_ids: [] as number[],
 })
 
 const tabs = [
   { id: 'basic', label: 'اطلاعات اصلی', component: TabBasicInfo },
+  { id: 'expertise', label: 'نقد و بررسی', component: TabExpertise },
   { id: 'specs', label: 'مشخصات فنی', component: TabTechnicalSpecs },
   { id: 'variants', label: 'متغیرها', component: TabVariants },
   { id: 'related', label: 'مرتبط‌ها', component: TabRelated },
+  { id: 'seo', label: 'سئو', component: TabSeo },
 ]
 
 const currentTabComponent = computed(() => {
@@ -177,14 +196,18 @@ watch(
 // دریافت دسته‌ها و برندها از بانک اطلاعاتی
 const fetchInitialData = async () => {
   try {
-    const [catRes, brandRes] = await Promise.all([
+    const [catRes, brandRes, ingRes, badgeRes] = await Promise.all([
       axios.get('/admin/categories'),
       axios.get('/admin/brands'),
+      axios.get('/admin/ingredients'), // API جدید
+      axios.get('/admin/trust-badges'), // API جدید
     ])
     categories.value = catRes.data.data
     brands.value = brandRes.data.data
+    ingredients.value = ingRes.data.data
+    trustBadges.value = badgeRes.data.data
   } catch (error) {
-    notify.error('خطا در دریافت اطلاعات اولیه (برندها و دسته‌ها)')
+    notify.error('خطا در دریافت اطلاعات اولیه')
   }
 }
 
@@ -193,7 +216,6 @@ const submitCreate = async () => {
   try {
     const fd = new FormData()
 
-    // ۱. داده‌های متنی اصلی
     fd.append('name', form.name)
     fd.append('slug', form.slug || '')
     fd.append('sku', form.sku || '')
@@ -206,46 +228,47 @@ const submitCreate = async () => {
     fd.append('call_for_price', form.call_for_price ? '1' : '0')
     fd.append('short_description', form.short_description || '')
     fd.append('long_description', form.long_description || '')
+    fd.append('expert_review', form.expert_review || '')
+    fd.append('how_to_use', form.how_to_use || '')
 
-    // برند محصول
     if (form.brand_id) {
       fd.append('brand_id', String(form.brand_id))
     }
 
-    // ۲. دسته‌بندی‌ها (ارسال تکی برای پردازش در آرایه بک‌ند)
     if (form.category_ids.length > 0) {
-      form.category_ids.forEach((id, i) => fd.append(`category_ids[${i}]`, String(id)))
       fd.append('primary_category_id', String(form.category_ids[0]))
-    } else {
-      fd.append('category_ids', '')
     }
 
-    // ۳. تگ‌ها
-    if (form.tag_names.length > 0) {
-      form.tag_names.forEach((tag, i) => fd.append(`tag_names[${i}]`, tag))
-    } else {
-      fd.append('tag_names', '')
-    }
-
-    // ۴. داده‌های ساختاریافته (JSON)
+    // ارسال آرایه‌ها به صورت JSON String
+    fd.append('ingredients', JSON.stringify(form.ingredient_ids))
+    fd.append('trust_badges', JSON.stringify(form.trust_badge_ids))
+    fd.append('category_ids', JSON.stringify(form.category_ids))
+    fd.append('tag_names', JSON.stringify(form.tag_names))
     fd.append('specifications', JSON.stringify(form.specifications))
     fd.append('variants', JSON.stringify(form.variants))
-    fd.append('related_ids', JSON.stringify(form.related_ids))
+    fd.append('related_ids', JSON.stringify(form.related_ids || []))
+
     fd.append('meta[title]', form.seo.title || '')
     fd.append('meta[description]', form.seo.description || '')
+    fd.append('meta[canonical_url]', form.seo.canonical_url || '')
+    fd.append('meta[robots]', form.seo.robots || 'index, follow')
 
-    // ۵. فایل‌ها
     if (rawCatalogFile.value instanceof File) {
       fd.append('catalog_file', rawCatalogFile.value)
     }
+
     if (form.new_thumbnail instanceof File) {
       fd.append('thumbnail', form.new_thumbnail)
-    }
-    if (form.new_gallery_files.length > 0) {
-      form.new_gallery_files.forEach((file) => fd.append('gallery[]', file))
+      fd.append('thumbnail_alt', form.thumbnail_alt || form.name)
     }
 
-    // ۶. ارسال به سرور
+    if (form.new_gallery_files.length > 0) {
+      form.new_gallery_files.forEach((file, index) => {
+        fd.append('gallery[]', file)
+        fd.append(`gallery_alts[${index}]`, form.gallery_alts[index] || form.name)
+      })
+    }
+
     await axios.post('/admin/products', fd)
 
     notify.success('محصول جدید با موفقیت در سیستم ثبت شد')

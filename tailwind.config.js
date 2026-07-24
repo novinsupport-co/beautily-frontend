@@ -1,12 +1,7 @@
 import defaultTheme from 'tailwindcss/defaultTheme'
-import formKitTailwind from '@formkit/themes/tailwindcss'
 
 export default {
-  content: [
-    './index.html',
-    './src/**/*.{vue,js,ts,jsx,tsx}',
-    './node_modules/@formkit/themes/dist/**/*.{css,js}',
-  ],
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -57,5 +52,4 @@ export default {
       },
     },
   },
-  plugins: [formKitTailwind],
 }

@@ -99,6 +99,14 @@
           <RouterLink
             active-class="nav-link-sub-active"
             class="nav-link-sub"
+            to="/admin/expertise-manager"
+          >
+            <i class="pi pi-tags text-[13px] opacity-70"></i>
+            <span>ترکیبات و نشان‌ها</span>
+          </RouterLink>
+          <RouterLink
+            active-class="nav-link-sub-active"
+            class="nav-link-sub"
             to="/admin/OrderManager"
           >
             <i class="pi pi-shopping-cart text-[13px] opacity-70"></i>
@@ -183,7 +191,14 @@
             <i class="pi pi-cog text-[13px] opacity-70"></i>
             <span>تنظیمات مالی و فروشگاه</span>
           </RouterLink>
-
+          <RouterLink
+            active-class="nav-link-sub-active"
+            class="nav-link-sub"
+            to="/admin/admin-home-settings"
+          >
+            <i class="pi pi-cog text-[13px] opacity-70"></i>
+            <span>تنظیمات صفحه اصلی فروشگاه</span>
+          </RouterLink>
           <RouterLink
             active-class="nav-link-sub-active"
             class="nav-link-sub"
@@ -200,6 +215,14 @@
           >
             <i class="pi pi-mobile text-[13px] opacity-70"></i>
             <span>مدیریت تصاویر سایت</span>
+          </RouterLink>
+          <RouterLink
+            active-class="nav-link-sub-active"
+            class="nav-link-sub"
+            to="/admin/adminSite-settings"
+          >
+            <i class="pi pi-mobile text-[13px] opacity-70"></i>
+            <span>مدیریت المانهای سایت</span>
           </RouterLink>
           <RouterLink active-class="nav-link-sub-active" class="nav-link-sub" to="/admin/test-api">
             <i class="pi pi-code text-[13px] opacity-70"></i>
