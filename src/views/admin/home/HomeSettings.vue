@@ -87,6 +87,7 @@
       <FeatureManager v-else-if="activeTab === 'features'" />
       <HomeCategoriesManager v-else-if="activeTab === 'categories'" />
       <HomeBlogsManager v-else-if="activeTab === 'blogs'" />
+      <MaintenanceManager v-else-if="activeTab === 'maintenance'" />
     </div>
   </div>
 </template>
@@ -99,9 +100,16 @@ import HomeHeroManager from '@/views/admin/home/Tabs/HomeHeroManager.vue'
 import HomeCategoriesManager from '@/views/admin/home/Tabs/HomeCategoriesManager.vue'
 import HomeBlogsManager from '@/views/admin/home/Tabs/HomeBlogsManager.vue'
 import HomeProductSliderManager from '@/views/admin/home/Tabs/HomeProductSliderManager.vue'
-
+import MaintenanceManager from '@/views/admin/home/Tabs/MaintenanceManager.vue'
 // تایپ‌های ممکن برای تب‌ها
-type TabKey = 'heroes' | 'product_sliders' | 'banners' | 'features' | 'categories' | 'blogs'
+type TabKey =
+  | 'heroes'
+  | 'product_sliders'
+  | 'banners'
+  | 'features'
+  | 'categories'
+  | 'blogs'
+  | 'maintenance'
 
 const activeTab = ref<TabKey>('heroes')
 
@@ -113,5 +121,6 @@ const tabs: { label: string; value: TabKey }[] = [
   { label: 'ویژگی‌های فروشگاه', value: 'features' },
   { label: 'دسته‌بندی‌ها', value: 'categories' },
   { label: 'مقالات', value: 'blogs' },
+  { label: 'وضعیت سایت (تعمیرات)', value: 'maintenance' },
 ]
 </script>

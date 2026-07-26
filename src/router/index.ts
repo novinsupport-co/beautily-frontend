@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteLocationNormalized } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useSiteSettingsStore } from '@/stores/siteSettings'
 
 // Layouts
 import PublicLayout from '@/layouts/PublicLayout.vue'
@@ -15,12 +16,14 @@ import Category from '@/views/public/CategoryProducts.vue'
 import CartPage from '@/components/cart/CartPage.vue'
 import NotFound from '@/views/public/NotFound.vue'
 import Compare from '@/views/public/CompareProducts.vue'
+import MaintenanceView from '@/views/public/MaintenanceView.vue'
 
 // Views - Auth
 import LoginView from '@/views/auth/LoginView.vue'
 import RegisterView from '@/views/auth/RegisterView.vue'
 import ForgotPassword from '@/views/auth/ForgotPasswordView.vue'
 import ResetPassword from '@/views/auth/ForgotPasswordView.vue'
+
 // Views - User
 import UserDashboard from '@/views/user/Dashboard.vue'
 import CheckoutPage from '@/views/user/CheckoutPage.vue'
@@ -32,6 +35,7 @@ import UserReviews from '@/views/user/UserReviews.vue'
 import UserTransactions from '@/views/user/UserTransactions.vue'
 import PaymentReceipt from '@/views/user/PaymentReceipt.vue'
 import UserOrderDetail from '@/views/user/UserOrderDetail.vue'
+
 // Views - Admin
 import AdminDashboard from '@/views/admin/Dashboard.vue'
 import AdminProducts from '@/views/admin/products/AdminProducts.vue'
@@ -42,7 +46,6 @@ import ApiTest from '@/views/admin/Testes/ApiSandbox.vue'
 import AdminProductVariants from '@/views/admin/attributes/AttributeIndex.vue'
 import ExpertiseManager from '@/views/admin/categories/ExpertiseManager.vue'
 import AdminSiteSettings from '@/views/admin/settings/AdminSiteSettings.vue'
-// Views - Admin Reviews & Q&A
 import AdminReviews from '@/views/admin/reviews/AdminReviews.vue'
 import AdminQuestions from '@/views/admin/questions/AdminQuestions.vue'
 import SystemImages from '@/views/admin/settings/SystemImages.vue'
@@ -54,11 +57,15 @@ import AdminOrderManager from '@/views/admin/orders/OrderManager.vue'
 import AdminLogMonitoring from '@/views/admin/Logs/LogMonitoring.vue'
 import AdminCommunicationDashboard from '@/views/admin/Commonications/CommunicationDashboard.vue'
 import NotificationManager from '@/views/admin/settings/NotificationManager.vue'
-// اضافه شدن ایمپورت صفحه تنظیمات فروشگاه
 import AdminShopSettings from '@/views/admin/settings/AdminShopSettings.vue'
 import AdminHomeSettings from '@/views/admin/home/HomeSettings.vue'
 
 const routes = [
+  {
+    path: '/maintenance',
+    name: 'maintenance',
+    component: MaintenanceView,
+  },
   {
     path: '/',
     component: PublicLayout,
@@ -70,7 +77,6 @@ const routes = [
       { path: 'product/:slug', name: 'public.product.detail', component: PublicProductDetail },
       { path: 'cart', name: 'public.cart', component: CartPage },
       { path: 'compare', name: 'pablic.compare', component: Compare },
-      // ✅ این خط اضافه شود:
       { path: 'checkout', name: 'checkout', component: CheckoutPage, meta: { requiresAuth: true } },
     ],
   },
@@ -131,8 +137,6 @@ const routes = [
       },
       { path: 'reviews', name: 'admin.reviews', component: AdminReviews },
       { path: 'questions', name: 'admin.questions', component: AdminQuestions },
-
-      // اضافه شدن مسیر تنظیمات فروشگاه
       { path: 'shop-settings', name: 'admin.shop-settings', component: AdminShopSettings },
       {
         path: 'notification-templateForm',
@@ -160,41 +164,66 @@ const router = createRouter({
 })
 
 // =======================
-// 🔐 Global Auth Guard
+// 🔐 Global Auth & Maintenance Guard
 // =======================
 router.beforeEach(async (to: RouteLocationNormalized) => {
   const auth = useAuthStore()
+  const siteSettings = useSiteSettingsStore()
 
-  // 1. بررسی و بازیابی سشن اگر نیاز به لاگین دارد و کاربر احراز نشده
-  if (to.meta.requiresAuth && !auth.isAuthenticated) {
+  // 1. بررسی و بارگذاری تنظیمات سایت اگر هنوز لود نشده است
+  if (Object.keys(siteSettings.settings).length === 0) {
+    await siteSettings.fetchSettings()
+  }
+
+  // 2. همواره تلاش برای بازیابی سشن (احراز هویت) تا نقش کاربر در همه صفحات مشخص شود
+  if (!auth.isAuthenticated) {
     await auth.restoreSession()
   }
 
-  // 2. جلوگیری از ورود افراد مهمان به صفحات محافظت شده
+  const currentUser = auth.user
+  const isAdmin = currentUser?.role === 'admin'
+  const isAuthRoute = to.path.startsWith('/auth')
+
+  // بررسی وضعیت حالت تعمیرات از استور (اصلاح شده)
+  const isMaintenance =
+    siteSettings.settings.maintenance_mode === '1' ||
+    siteSettings.settings.maintenance_mode === 1 ||
+    siteSettings.settings.maintenance_mode === 'true' ||
+    siteSettings.settings.maintenance_mode === true
+
+  // الف) هدایت به صفحه تعمیرات برای کاربران عادی (ادمین‌ها و مسیرهای لاگین مستثنی هستند)
+  if (isMaintenance && !isAdmin && !isAuthRoute && to.name !== 'maintenance') {
+    return { name: 'maintenance' }
+  }
+
+  // ب) اگر سایت در حالت تعمیرات نیست اما کاربر تلاش می‌کند صفحه maintenance را باز کند -> هدایت به خانه
+  if (!isMaintenance && to.name === 'maintenance') {
+    return { name: 'public.home' }
+  }
+
+  // 3. جلوگیری از ورود افراد مهمان به صفحات محافظت شده
   if (to.meta.requiresAuth && !auth.isAuthenticated) {
     return '/auth/login'
   }
 
-  const currentUser = auth.user
-
-  // 3. چک کردن دسترسی نقش‌ها (Role Guard)
+  // 4. چک کردن دسترسی نقش‌ها (Role Guard)
   if (to.meta.requiresAuth && currentUser) {
     const requiredRole = to.meta.role
 
     // الف) اگر صفحه مخصوص ادمین است ولی شخص ادمین نیست -> پرتاب به پنل یوزر
-    if (requiredRole === 'admin' && currentUser.role !== 'admin') {
+    if (requiredRole === 'admin' && !isAdmin) {
       return '/user/dashboard'
     }
 
     // ب) اگر صفحه مخصوص یوزر است ولی شخص ادمین است -> پرتاب به داشبورد ادمین
-    if (requiredRole === 'user' && currentUser.role === 'admin') {
+    if (requiredRole === 'user' && isAdmin) {
       return '/admin/dashboard'
     }
   }
 
-  // 4. جلوگیری از ورود افراد لاگین کرده به صفحه لاگین/رجیستر
-  if (auth.isAuthenticated && to.path.startsWith('/auth') && currentUser) {
-    return currentUser.role === 'admin' ? '/admin/dashboard' : '/user/dashboard'
+  // 5. جلوگیری از ورود افراد لاگین کرده به صفحات Auth (مثل لاگین/رجیستر)
+  if (auth.isAuthenticated && isAuthRoute && currentUser) {
+    return isAdmin ? '/admin/dashboard' : '/user/dashboard'
   }
 })
 
